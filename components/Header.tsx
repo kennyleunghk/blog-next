@@ -1,4 +1,5 @@
 import React from 'react';
+import { useRouter } from 'next/router';
 import { makeStyles } from '@mui/styles';
 import { Toolbar } from '@mui/material';
 import Button from '@material-ui/core/Button';
@@ -76,12 +77,16 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const Header: NextPage = ({ categories, auth, logout:() => void }) => {
-  const classes = useStyles();
+interface Props {
+  logout: () => void;
+}
 
+const Header: NextPage<Props> = ({ logout }) => {
+  const classes = useStyles();
+  const router = useRouter();
   const logoff = () => {
     logout();
-    history.push('/login');
+    router.push('/login');
   };
 
   return (
