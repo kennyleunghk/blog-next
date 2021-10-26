@@ -1,13 +1,11 @@
-import { FC } from "react";
-import { AppProps } from "next/app";
-import { Provider } from "react-redux";
-import store from "../store/index";
-import "bootstrap/dist/css/bootstrap.min.css";
+import { FC } from 'react';
+import { AppProps } from 'next/app';
+import { Provider } from 'react-redux';
+import store from '../store/index';
 
-import "../styles/globals.css";
-import Layout from "../components/layout";
+import Layout from '../components/layout';
 
-const App: FC<AppProps> = ({ Component, pageProps }) => {
+const App: FC<AppProps> = ({ Component, pageProps }: AppProps) => {
   return (
     <Provider store={store}>
       <Layout>

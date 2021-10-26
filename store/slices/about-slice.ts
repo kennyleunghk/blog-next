@@ -1,22 +1,15 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 const initialState = {
-  picture: "",
-  uploadPicture: "",
-  mdData: "",
+  picture: '',
+  uploadPicture: '',
+  mdData: '',
 };
 
 const aboutSlice = createSlice({
-  name: "auth",
+  name: 'auth',
   initialState,
-  reducers: {
-    setLoggedIn: (state) => {
-      state.isLoggedIn = true;
-    },
-    logout: (state) => {
-      state.isLoggedIn = true;
-    },
-  },
+  reducers: {},
 });
 
 export const aboutActions = aboutSlice.actions;
