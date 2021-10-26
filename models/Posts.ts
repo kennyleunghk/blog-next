@@ -1,9 +1,9 @@
-interface PostModel {
-  Category: String;
-  Contents: String;
-  Description: String;
-  Id: Number;
-  Image: String;
-  Title: String;
-  Tags: String;
+export interface PostModel {
+  Category: string | null;
+  Contents: string | null;
+  Description: string | null;
+  Id: number | null;
+  Image: string | null;
+  Title: string | null;
+  Tags: string | null;
 }

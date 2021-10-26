@@ -1,4 +1,4 @@
-interface CategoryModel {
-  Id: Number;
-  Title: String;
+export interface CategoryModel {
+  Id: number | null;
+  Title: string | null;
 }

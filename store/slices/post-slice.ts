@@ -1,8 +1,10 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { CategoryModel } from "../../models/CategoryModel";
+import { PostModel } from "../../models/Posts";
 
-interface InitialState {
-  posts: PostModel[];
-  categories: CategoryModel[];
+class InitialState {
+  posts: PostModel[] | undefined;
+  categories: CategoryModel[] | undefined;
 }
 
 const initialState = {
@@ -11,16 +13,20 @@ const initialState = {
 } as InitialState;
 
 const postSlice = createSlice({
-  name: 'post',
+  name: "post",
   initialState,
   reducers: {
     getPost: (state, action: PayloadAction<PostModel[]>) => {
       state.posts = action.payload;
     },
-    increment(state, action: PayloadAction) {},
+    setCategories: (state, action: PayloadAction<CategoryModel[]>) => {
+      console.log("get");
+      state.categories = action.payload;
+      console.log("finished");
+    },
   },
 });
 
-export const counterActions = postSlice.actions;
+export const postActions = postSlice.actions;
 
 export default postSlice.reducer;
