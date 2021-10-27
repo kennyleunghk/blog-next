@@ -4,16 +4,11 @@ import { styled } from '@mui/styles';
 import Header from '../header';
 import Footer from '../footer';
 
-const Main = styled('div')(() => ({
-  width: '100%',
-  marginTop: '10%',
-}));
-
 const Layout: FC = ({ children }) => {
   return (
     <>
       <Header />
-      <Main>{children}</Main>
+      <main style={{ marginTop: '20px' }}>{children}</main>
       <Footer />
     </>
   );

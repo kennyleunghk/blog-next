@@ -32,7 +32,11 @@ const ProfileImage = () => {
         {isLoggedIn === true ? <ImageUpload /> : null}
       </div>
 
-      {isLoggedIn ? <AboutMdEditor /> : <Markdown source={markdownData} />}
+      {isLoggedIn ? (
+        <AboutMdEditor markdownData={markdownData} />
+      ) : (
+        <Markdown source={markdownData} />
+      )}
     </div>
   );
 };

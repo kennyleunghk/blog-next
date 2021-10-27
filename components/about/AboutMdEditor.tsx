@@ -10,20 +10,22 @@ import { aboutActions } from '../../store/slices/about-slice';
 import '@uiw/react-md-editor/markdown-editor.css';
 import '@uiw/react-markdown-preview/markdown.css';
 
+interface props {
+  markdownData: string;
+}
+
 const MDEditor = dynamic(
   () => import('@uiw/react-md-editor').then((mod) => mod.default),
   { ssr: false }
 );
 
-const AboutMdEditor: FC = () => {
+const AboutMdEditor: FC<props> = ({ markdownData }) => {
   const markdown = useRef<HTMLElement | null>();
-  const markdownData = useSelector(
-    (state: rootState) => state.about.markdownData
-  );
+  // const markdownData = useSelector(
+  //   (state: rootState) => state.about.markdownData
+  // );
   const dispatch = useDispatch();
-  useEffect(() => {
-    console.log(markdownData);
-  }, [markdownData]);
+
   // const sendToServer = async () => {
   //   const token = localStorage.getItem('token');
 
