@@ -15,6 +15,7 @@
     "@mui/material": "^5.0.4",
     "@mui/styles": "^5.0.1",
     "@reduxjs/toolkit": "^1.6.2",
+    "@uiw/react-markdown-preview": "^3.4.1",
     "@uiw/react-md-editor": "^3.6.0",
     "axios": "^0.23.0",
     "bootstrap": "^4.6.0",

@@ -13,11 +13,14 @@ const aboutSlice = createSlice({
   reducers: {
     getAboutMe: (
       state,
-      action: PayloadAction<{ Picture: string; Describes: string }>,
+      action: PayloadAction<{ Picture: string; Describes: string }>
     ) => {
       const { Picture, Describes } = action.payload;
       state.picture = Picture;
       state.markdownData = Describes;
+    },
+    setMarkdownData: (state, action: PayloadAction<string>) => {
+      state.markdownData = action.payload;
     },
   },
 });
