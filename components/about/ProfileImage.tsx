@@ -17,7 +17,10 @@ const ProfileImage = () => {
   return (
     <div>
       <div className={classes['profile-picture']}>
-        <img src={`${URL}Static/Images/${about.picture}`} alt='Kenny Leung' />
+        <img
+          src={`http://kennyleung-blog.sytes.net:9321/Static/Images/${about.picture}`}
+          alt='Kenny Leung'
+        />
         {isLoggedIn === true ? <ImageUpload /> : null}
       </div>
 
