@@ -1,0 +1,32 @@
+.categories_toolbar {
+  display: flex;
+  padding: 0 0 0 0;
+  position: static;
+  min-height: 0;
+}
+
+.categories_toolbar .toolbarLink {
+  flex: 1;
+  font-weight: bold;
+  text-align: center;
+  background-color: #4a4a4a;
+  color: white;
+  padding: 10px 10px;
+}
+
+.toolbarLink:hover {
+  background-color: #ffc250;
+  font-weight: bold;
+  text-decoration: none;
+  color: #007391;
+  cursor: pointer;
+}
+
+.categories_toolbar .toolbarLink-active {
+  flex: 1;
+  font-weight: bold;
+  text-align: center;
+  background-color: #ffc250;
+  color: white;
+  padding: 10px 10px;
+}

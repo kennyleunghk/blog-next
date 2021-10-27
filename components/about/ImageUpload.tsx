@@ -2,6 +2,10 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { rootState } from '../../store';
 import aboutActions from '../../store/slices/about-slice';
+import { messageActions } from '../../store/slices/message-slice';
+
+import classes from '../../styles/about/ProfileImage.module.css';
+import PanoramaIcon from '@mui/icons-material/Panorama';
 
 const ImageUpload = () => {
   const about = useSelector((state: rootState) => state.about);
@@ -11,8 +15,8 @@ const ImageUpload = () => {
   };
   return (
     <>
-      <div className='pic-upload'>
-        <label className='btn btn-info'>
+      <div className={classes['image-upload']}>
+        <label>
           <input
             onChange={setPicture}
             style={{ display: 'none' }}

@@ -1,0 +1,10 @@
+.profile-picture > img {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  vertical-align: middle;
+}
+
+.profile-picture > .image-upload {
+  transform: translate(55px, -40px);
+}
