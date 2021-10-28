@@ -8,7 +8,7 @@ import aboutReducer from './slices/about-slice';
 const store = configureStore({
   reducer: {
     auth: authReducer,
-    posts: postReducer,
+    post: postReducer,
     about: aboutReducer,
   },
 });

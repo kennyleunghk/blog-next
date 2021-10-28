@@ -17,7 +17,7 @@ const Head = styled('div')(({ theme }) => ({
 
 const Header: FC = () => {
   const dispatch = useDispatch();
-  const cates = useSelector((state: rootState) => state.posts.categories);
+  const cates = useSelector((state: rootState) => state.post.categories);
   useEffect(() => {
     console.log(cates);
   }, [cates]);
@@ -39,6 +39,9 @@ const Header: FC = () => {
           'http://kennyleung-blog.sytes.net:9321/api/LoadData/Posts',
           null,
         );
+        if (posts) {
+          dispatch(postActions.getPost(posts));
+        }
 
         const about: any = await useHttp(
           'get',

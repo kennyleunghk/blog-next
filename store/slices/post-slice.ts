@@ -1,6 +1,6 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { CategoryModel } from "../../models/CategoryModel";
-import { PostModel } from "../../models/Posts";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { CategoryModel } from '../../models/CategoryModel';
+import { PostModel } from '../../models/PostModel';
 
 class InitialState {
   posts: PostModel[] | undefined;
@@ -13,16 +13,16 @@ const initialState = {
 } as InitialState;
 
 const postSlice = createSlice({
-  name: "post",
+  name: 'post',
   initialState,
   reducers: {
     getPost: (state, action: PayloadAction<PostModel[]>) => {
+      console.log('get post');
       state.posts = action.payload;
+      console.log(state.posts);
     },
     setCategories: (state, action: PayloadAction<CategoryModel[]>) => {
-      console.log("get");
       state.categories = action.payload;
-      console.log("finished");
     },
   },
 });

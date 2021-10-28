@@ -11,20 +11,19 @@ import classes from '../../styles/layout/CategoryBar.module.css';
 const CategoryBar = () => {
   const router = useRouter();
   const categories: CategoryModel[] | any = useSelector(
-    (state: rootState) => state.posts.categories,
+    (state: rootState) => state.post.categories,
   );
   return (
     <Toolbar
       component='nav'
       variant='dense'
       className={classes.categories_toolbar}>
-      {categories.map((section: string | any, index: number | any) => (
+      {categories.map((section: string | any) => (
         <div
           className={classes.toolbarLink}
+          key={section.id}
           onClick={() => router.push(`/${section.name}`)}>
-          <Link key={index} href={'/' + section.name}>
-            {section.name}
-          </Link>
+          <Link href={'/' + section.name}>{section.name}</Link>
         </div>
       ))}
     </Toolbar>

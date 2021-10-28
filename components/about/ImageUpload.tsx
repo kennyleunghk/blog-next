@@ -18,20 +18,22 @@ const ImageUpload = () => {
   };
   return (
     <>
-      <div className={classes['image-upload']}>
-        <label>
-          <input
-            onChange={setPicture}
-            style={{ display: 'none' }}
-            type='file'
-          />
-          <span style={{ display: 'flex' }}>
-            <FileUploadIcon fontSize='small' />
-            <Typography fontWeight='bold' fontSize='small'>
-              Change
-            </Typography>
-          </span>
-        </label>
+      <div className={classes['button-wrapper']}>
+        <div className={classes['image-upload']}>
+          <label className={classes['image-label']}>
+            <input
+              onChange={setPicture}
+              style={{ display: 'none' }}
+              type='file'
+            />
+            <span style={{ display: 'flex' }}>
+              <FileUploadIcon fontSize='small' />
+              <Typography fontWeight='bold' fontSize='small'>
+                Change
+              </Typography>
+            </span>
+          </label>
+        </div>
       </div>
     </>
   );

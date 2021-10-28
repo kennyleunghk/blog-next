@@ -3,7 +3,8 @@ export interface PostModel {
   Contents: string | null;
   Description: string | null;
   Id: number | null;
-  Image: string | null;
+  CoverImg: string | null;
   Title: string | null;
   Tags: string | null;
+  CreatedTime: number;
 }

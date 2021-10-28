@@ -41,7 +41,7 @@ const IconsBar = () => {
         aria-controls='menu-appbar'
         aria-haspopup='true'
         color='inherit'
-        onClick={() => router.push('/about')}>
+        onClick={() => router.push('/About')}>
         <InfoIcon />
       </IconButton>
 
