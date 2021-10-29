@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { useRouter } from 'next/router';
 import { styled } from '@mui/styles';
 import { Card, CardMedia, CardHeader, CardContent } from '@mui/material';
-import Typography from '@mui/material/Typography';
+import Typography, { TypographyProps } from '@mui/material/Typography';
 import Box, { BoxProps } from '@mui/material/Box';
 import moment from 'moment';
 import Link from 'next/link';
@@ -25,31 +25,57 @@ export const PostCard: FC<AppProps> = ({ post }) => {
   const CardHeaderTitle = (
     <Typography
       variant='h6'
-      className={classes['post-title']}
+      fontStyle={{
+        fontWeight: 'bold',
+        fontSize: '1.1rem',
+        fontStyle: 'italic',
+      }}
       component='div'
       align='center'>
       {post.Title}
     </Typography>
   );
 
+  const routeHandler = (path: string) => {
+    router.push(path);
+  };
+
   return (
     <div className='col-sm-12 col-md-12 col-lg-6'>
       <Card className={classes['post-card']} sx={{ width: 600 }}>
-        <CardHeader title={CardHeaderTitle} />
+        <CardHeader title={CardHeaderTitle} className={classes['post-title']} />
         <CardMedia
           component='img'
-          height='200'
-          width='600'
+          className={classes['post-image']}
           image={`http://kennyleung-blog.sytes.net:9321/Static/Images/${post.CoverImg}`}
           alt={post.CoverImg}
-          onClick={() => router.push('/')}
+          onClick={() => routeHandler(`Post/${post.Id}`)}
         />
-
         <Link href={`/Post/${post.Id}`}>
           <div className={classes['post-title']}></div>
         </Link>
 
         <CardContent>
+          <Box>
+            <Typography minHeight='3rem' fontStyle='italic'>
+              {post.Description}
+            </Typography>
+          </Box>
+          <Box
+            sx={{
+              display: 'grid',
+              columnGap: 3,
+              rowGap: 1,
+              gridTemplateColumns: 'repeat(2, 1fr)',
+              marginTop: '2rem',
+            }}>
+            <Typography variant='body2' align='left'>
+              Kenny Leung
+            </Typography>
+            <Typography variant='body2' align='right'>
+              {moment(post.CreatedTime).format('DD MMM, YYYY')}
+            </Typography>
+          </Box>
           {/* <Row style={{ height: '100%' }}>
             <Col md={5} xs={12} style={{ textAlign: 'center' }}>
               <Link href={`/Post/${post.Id}`}>

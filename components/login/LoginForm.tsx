@@ -4,8 +4,8 @@ import React, {
   useEffect,
   useRef,
   ChangeEvent,
-  SyntheticEvent,
   FormEvent,
+  FocusEvent,
 } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
@@ -27,19 +27,26 @@ const LoginForm: FC = () => {
   const dispatch = useDispatch();
   const button = useRef();
   const isLoggedIn = useSelector((state: rootState) => state.auth.isLoggedIn);
-  const [disabled, setDisabled] = useState<boolean>(true);
   const [data, setData] = useState<LoginFormData>({
     UserId: '',
     Password: '',
   });
+  const [invalidId, setInvalidId] = useState<boolean>(false);
+  const [invalidPassword, setInvalidPassword] = useState<boolean>(false);
+  const [touch, setTouch] = useState<boolean>(false);
 
   useEffect(() => {
-    if (data.UserId.length !== 0 && data.Password.length !== 0) {
-      setDisabled(false);
+    if (data.UserId.trim().length === 0 && touch === true) {
+      setInvalidId(true);
     } else {
-      setDisabled(true);
+      setInvalidId(false);
     }
-    console.log(data);
+
+    if (data.Password.trim().length === 0 && touch === true) {
+      setInvalidPassword(true);
+    } else {
+      setInvalidPassword(false);
+    }
   }, [data]);
 
   useEffect(() => {
@@ -52,6 +59,11 @@ const LoginForm: FC = () => {
       UserId: e.target.value,
     });
     // setError({ msg: undefined });
+  };
+
+  const firstInputHandler = () => {
+    console.log('executed');
+    setTouch(true);
   };
 
   const setPassword = (e: ChangeEvent<HTMLInputElement>) => {
@@ -90,28 +102,32 @@ const LoginForm: FC = () => {
   // };
 
   return (
-    <Box component='form'>
+    <Box component='form' autoComplete='off'>
       <TextField
-        variant='outlined'
+        error={invalidId}
         margin='normal'
-        id='id'
         fullWidth
         label='Login ID'
-        autoFocus
         value={data.UserId}
         onChange={setId}
         required
+        onFocus={() => {
+          !touch && firstInputHandler();
+        }}
       />
       <TextField
+        error={invalidPassword}
         variant='outlined'
         margin='normal'
         required
         fullWidth
         label='Password'
         type='password'
-        id='password'
         value={data.Password}
         onChange={setPassword}
+        onFocus={() => {
+          !touch && firstInputHandler();
+        }}
       />
       <Button
         ref={button}
@@ -120,8 +136,9 @@ const LoginForm: FC = () => {
         variant='contained'
         color='primary'
         onClick={submitHandler}
-        disabled={disabled}
-      >
+        disabled={
+          invalidPassword === false && invalidId === false ? false : true
+        }>
         Sign In
       </Button>
     </Box>
