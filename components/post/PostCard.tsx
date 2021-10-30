@@ -27,11 +27,12 @@ export const PostCard: FC<AppProps> = ({ post }) => {
       variant='h6'
       fontStyle={{
         fontWeight: 'bold',
-        fontSize: '1.1rem',
+        fontSize: '0.9rem',
         fontStyle: 'italic',
       }}
       component='div'
-      align='center'>
+      align='center'
+    >
       {post.Title}
     </Typography>
   );
@@ -42,7 +43,7 @@ export const PostCard: FC<AppProps> = ({ post }) => {
 
   return (
     <div className='col-sm-12 col-md-12 col-lg-6'>
-      <Card className={classes['post-card']} sx={{ width: 600 }}>
+      <Card className={classes['post-card']} sx={{ width: 500 }}>
         <CardHeader title={CardHeaderTitle} className={classes['post-title']} />
         <CardMedia
           component='img'
@@ -57,7 +58,13 @@ export const PostCard: FC<AppProps> = ({ post }) => {
 
         <CardContent>
           <Box>
-            <Typography minHeight='3rem' fontStyle='italic'>
+            <Typography
+              minHeight='3rem'
+              sx={{
+                fontStyle: 'italic',
+                fontSize: '0.8rem',
+              }}
+            >
               {post.Description}
             </Typography>
           </Box>
@@ -67,12 +74,13 @@ export const PostCard: FC<AppProps> = ({ post }) => {
               columnGap: 3,
               rowGap: 1,
               gridTemplateColumns: 'repeat(2, 1fr)',
-              marginTop: '2rem',
-            }}>
-            <Typography variant='body2' align='left'>
+              marginTop: '1rem',
+            }}
+          >
+            <Typography variant='body2' align='left' fontSize='0.8rem'>
               Kenny Leung
             </Typography>
-            <Typography variant='body2' align='right'>
+            <Typography variant='body2' align='right' fontSize='0.8rem'>
               {moment(post.CreatedTime).format('DD MMM, YYYY')}
             </Typography>
           </Box>

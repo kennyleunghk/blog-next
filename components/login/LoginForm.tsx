@@ -9,6 +9,7 @@ import React, {
 } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
+import { useHttp } from '../../hooks/useHttp';
 import md5 from 'md5';
 import { rootState } from '../../store';
 
@@ -16,6 +17,8 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Button from '@mui/material/Button';
+
+import { authActions } from '../../store/slices/auth-slice';
 
 interface LoginFormData {
   UserId: string;
@@ -50,7 +53,10 @@ const LoginForm: FC = () => {
   }, [data]);
 
   useEffect(() => {
-    if (isLoggedIn === true) router.push('/');
+    console.log(isLoggedIn);
+    if (isLoggedIn === true) {
+      router.push('/');
+    }
   }, [isLoggedIn]);
 
   const setId = (e: ChangeEvent<HTMLInputElement>) => {
@@ -79,30 +85,24 @@ const LoginForm: FC = () => {
     // setError({ msg: undefined });
   };
 
-  const submitHandler = async (e: FormEvent) => {
-    e.preventDefault();
-    console.log('submit');
+  const submitHandler = async (event: FormEvent) => {
+    event.preventDefault();
+    console.log('prevent default');
+    const result = await useHttp(
+      'post',
+      'http://kennyleung-blog.sytes.net:9321/api/user/login',
+      { ...data, Password: md5(data.Password) }
+    );
+    if (result) {
+      console.log('result');
+      await localStorage.setItem('token', result.token);
+      console.log(localStorage.getItem('token'));
+      await dispatch(authActions.loggedIn());
+    }
   };
 
-  // const submitHandler = async (event) => {
-  //   event.preventDefault();
-  //   const result = axios
-  //     .post(URL + 'api/user/login', loginForm)
-  //     .catch((err) => {
-  //       console.log(err);
-  //       setError({ msg: 'UserId or Passowrd is incorrect!' });
-  //     });
-
-  //   await result.then((res) => {
-  //     if (res !== undefined) {
-  //       setAuth(res.data);
-  //       localStorage.setItem('token', 'Bearer ' + res.data.token);
-  //     }
-  //   });
-  // };
-
   return (
-    <Box component='form' autoComplete='off'>
+    <Box component='form' autoComplete='off' onSubmit={submitHandler}>
       <TextField
         error={invalidId}
         margin='normal'
@@ -135,10 +135,10 @@ const LoginForm: FC = () => {
         fullWidth
         variant='contained'
         color='primary'
-        onClick={submitHandler}
         disabled={
           invalidPassword === false && invalidId === false ? false : true
-        }>
+        }
+      >
         Sign In
       </Button>
     </Box>

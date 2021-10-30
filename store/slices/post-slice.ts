@@ -4,6 +4,7 @@ import { PostModel } from '../../models/PostModel';
 
 class InitialState {
   posts: PostModel[] | undefined;
+  showPosts: PostModel[] | undefined;
   categories: CategoryModel[] | undefined;
 }
 
@@ -17,9 +18,12 @@ const postSlice = createSlice({
   initialState,
   reducers: {
     getPost: (state, action: PayloadAction<PostModel[]>) => {
-      console.log('get post');
       state.posts = action.payload;
-      console.log(state.posts);
+    },
+    setShowPost: (state, action: PayloadAction<string>) => {
+      state.showPosts = state.posts.filter(
+        (post: PostModel) => post.Category === action.payload
+      );
     },
     setCategories: (state, action: PayloadAction<CategoryModel[]>) => {
       state.categories = action.payload;

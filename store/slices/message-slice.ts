@@ -1,13 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface InitialState {
-  type: string;
-  message: string;
+  type: string | null;
+  msg: string | null;
 }
 
 const initialState = {
-  message: '',
-  type: '',
+  msg: 'success message',
+  type: 'success',
 } as InitialState;
 
 const messageSlice = createSlice({
@@ -16,15 +16,15 @@ const messageSlice = createSlice({
   reducers: {
     setError: (state, action: PayloadAction<string>) => {
       state.type = 'error';
-      state.message = action.payload;
+      state.msg = action.payload;
     },
     setWarning: (state, action: PayloadAction<string>) => {
       state.type = 'warning';
-      state.message = action.payload;
+      state.msg = action.payload;
     },
     setSuccess: (state, action: PayloadAction<string>) => {
       state.type = 'success';
-      state.message = action.payload;
+      state.msg = action.payload;
     },
   },
 });

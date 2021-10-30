@@ -1,19 +1,23 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+interface InitialState {
+  isLoggedIn: boolean;
+}
+
 const initialState = {
   isLoggedIn: false,
-  profile: {},
 };
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    isLoggedIn: (state) => {
+    loggedIn: (state) => {
+      console.log('dispat reducer');
       state.isLoggedIn = true;
     },
     logout: (state) => {
-      state.isLoggedIn = true;
+      state.isLoggedIn = false;
     },
   },
 });

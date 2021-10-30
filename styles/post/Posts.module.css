@@ -3,7 +3,7 @@
 }
 
 .post-image {
-  height: 250px;
+  height: 180px;
 }
 
 .post-image:hover {
@@ -19,6 +19,7 @@
 .post-description {
   font-weight: bold;
   margin-bottom: 20px;
+  font-size: 0.8rem;
 }
 
 .post-content {

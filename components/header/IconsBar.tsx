@@ -18,7 +18,7 @@ const IconsBar = () => {
 
   const logoff = () => {
     dispatch(authActions.logout());
-    router.push('/login');
+    router.push('/Login');
   };
 
   return (
@@ -31,7 +31,8 @@ const IconsBar = () => {
         color='inherit'
         onClick={() =>
           window.open('https://gitlab.com/users/kennycha87/projects')
-        }>
+        }
+      >
         <GitHubIcon />
       </IconButton>
 
@@ -41,7 +42,8 @@ const IconsBar = () => {
         aria-controls='menu-appbar'
         aria-haspopup='true'
         color='inherit'
-        onClick={() => router.push('/About')}>
+        onClick={() => router.push('/About')}
+      >
         <InfoIcon />
       </IconButton>
 
@@ -52,7 +54,8 @@ const IconsBar = () => {
           aria-controls='menu-appbar'
           aria-haspopup='true'
           color='inherit'
-          onClick={logoff}>
+          onClick={logoff}
+        >
           <ExitToAppIcon>Log off</ExitToAppIcon>
         </IconButton>
       ) : (
@@ -62,7 +65,8 @@ const IconsBar = () => {
           aria-controls='menu-appbar'
           aria-haspopup='true'
           color='inherit'
-          onClick={() => router.push('/Login')}>
+          onClick={() => router.push('/Login')}
+        >
           <AccountCircle />
         </IconButton>
       )}
