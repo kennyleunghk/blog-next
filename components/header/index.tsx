@@ -18,9 +18,6 @@ const Head = styled('div')(({ theme }) => ({
 const Header: FC = () => {
   const dispatch = useDispatch();
   const cates = useSelector((state: rootState) => state.post.categories);
-  useEffect(() => {
-    console.log(cates);
-  }, [cates]);
 
   useEffect(() => {
     const fetchInitData = async () => {
@@ -28,7 +25,7 @@ const Header: FC = () => {
         const categories: any = await useHttp(
           'get',
           'http://kennyleung-blog.sytes.net:9321/api/LoadData/categories',
-          null,
+          null
         );
         if (categories) {
           dispatch(postActions.setCategories(categories));
@@ -37,7 +34,7 @@ const Header: FC = () => {
         const posts: any = await useHttp(
           'get',
           'http://kennyleung-blog.sytes.net:9321/api/LoadData/Posts',
-          null,
+          null
         );
         if (posts) {
           dispatch(postActions.getPost(posts));
@@ -46,9 +43,8 @@ const Header: FC = () => {
         const about: any = await useHttp(
           'get',
           'http://kennyleung-blog.sytes.net:9321/api/LoadData/AboutMe',
-          null,
+          null
         );
-        console.log(about);
         if (about) {
           dispatch(aboutActions.getAboutMe(about[0]));
         }

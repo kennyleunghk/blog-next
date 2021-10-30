@@ -10,6 +10,7 @@ class InitialState {
 
 const initialState = {
   posts: [],
+  showPosts: [],
   categories: [],
 } as InitialState;
 
@@ -18,12 +19,17 @@ const postSlice = createSlice({
   initialState,
   reducers: {
     getPost: (state, action: PayloadAction<PostModel[]>) => {
+      state.showPosts = action.payload;
       state.posts = action.payload;
     },
     setShowPost: (state, action: PayloadAction<string>) => {
-      state.showPosts = state.posts.filter(
-        (post: PostModel) => post.Category === action.payload
-      );
+      if (action.payload === 'All') {
+        state.showPosts = state.posts;
+      } else {
+        state.showPosts = state.posts.filter(
+          (post: PostModel) => post.Category === action.payload
+        );
+      }
     },
     setCategories: (state, action: PayloadAction<CategoryModel[]>) => {
       state.categories = action.payload;
