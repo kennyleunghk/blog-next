@@ -31,6 +31,26 @@ const postSlice = createSlice({
         );
       }
     },
+    searchPost: (state, action: PayloadAction<string>) => {
+      const searchInput = action.payload;
+      state.showPosts = state.posts.filter((post: PostModel) => {
+        if (
+          post.Contents.toLowerCase().includes(
+            searchInput.trim().toLowerCase()
+          ) ||
+          post.Category.toLowerCase().includes(
+            searchInput.trim().toLowerCase()
+          ) ||
+          post.Description.toLowerCase().includes(
+            searchInput.trim().toLowerCase()
+          ) ||
+          post.Title.toLowerCase().includes(searchInput.trim().toLowerCase()) ||
+          post.Tags.toLowerCase().includes(searchInput.trim().toLowerCase())
+        ) {
+          return post;
+        }
+      });
+    },
     setCategories: (state, action: PayloadAction<CategoryModel[]>) => {
       state.categories = action.payload;
     },

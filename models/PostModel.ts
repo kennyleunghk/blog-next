@@ -1,6 +1,8 @@
+import { CommentModel } from './CommentModel';
+
 export interface PostModel {
   Category: string | null;
-  Comments: Array<any>;
+  Comments: CommentModel;
   Contents: string | null;
   Description: string | null;
   Id: number | null;

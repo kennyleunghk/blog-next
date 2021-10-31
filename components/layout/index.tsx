@@ -38,7 +38,7 @@ const Layout: FC = ({ children }) => {
             <Alert {...alertType}>{texts.substr(0, 100)}</Alert>
           )}
         </Box>
-        <Box sx={{ marginTop: 1 }}>{children}</Box>
+        <Box sx={{ marginTop: 4 }}>{children}</Box>
       </Container>
       <Footer />
     </>

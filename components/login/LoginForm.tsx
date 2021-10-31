@@ -14,9 +14,7 @@ import md5 from 'md5';
 import { rootState } from '../../store';
 
 import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Button from '@mui/material/Button';
+import { Divider, TextField, Button } from '@mui/material';
 
 import { authActions } from '../../store/slices/auth-slice';
 
@@ -132,9 +130,9 @@ const LoginForm: FC = () => {
       <Button
         ref={button}
         type='submit'
-        fullWidth
         variant='contained'
         color='primary'
+        sx={{ display: 'block', margin: 'auto', marginTop: 2 }}
         disabled={
           invalidPassword === false && invalidId === false ? false : true
         }

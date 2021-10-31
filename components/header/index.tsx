@@ -6,7 +6,7 @@ import { authActions } from '../../store/slices/auth-slice';
 import { postActions } from '../../store/slices/post-slice';
 import { aboutActions } from '../../store/slices/about-slice';
 import { styled, alpha } from '@mui/material/styles';
-import AppBar from './HeaderBar';
+import HeaderBar from './HeaderBar';
 import CategoryBar from './CategoryBar';
 import { CategoryModel } from '../../models/CategoryModel';
 import { rootState } from '../../store';
@@ -68,7 +68,7 @@ const Header: FC = () => {
 
   return (
     <Head>
-      <AppBar />
+      <HeaderBar />
       <CategoryBar />
     </Head>
   );

@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { authActions } from '../../store/slices/auth-slice';
 import { rootState } from '../../store';
 
+import Stack from '@mui/material/Stack';
 import IconButton from '@mui/material/IconButton';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import InfoIcon from '@mui/icons-material/Info';
@@ -22,7 +23,7 @@ const IconsBar = () => {
   };
 
   return (
-    <div>
+    <Stack direction='row' spacing={0}>
       <IconButton
         size='large'
         aria-label='account of current user'
@@ -70,7 +71,7 @@ const IconsBar = () => {
           <AccountCircle />
         </IconButton>
       )}
-    </div>
+    </Stack>
   );
 };
 

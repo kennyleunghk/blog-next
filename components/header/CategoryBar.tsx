@@ -17,6 +17,7 @@ const CategoryBar = () => {
   );
 
   const changePostsHandler = (e: MouseEvent<HTMLElement>) => {
+    router.push('/');
     const value = e.currentTarget.innerHTML;
     dispatch(postActions.setShowPost(value));
   };

@@ -1,6 +1,9 @@
 import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
+import { ChangeEvent } from 'react';
+import { useDispatch } from 'react-redux';
+import { postActions } from '../../store/slices/post-slice';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -46,6 +49,11 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 const SearchField = () => {
+  const dispatch = useDispatch();
+  const search = (e: ChangeEvent<HTMLInputElement>) => {
+    dispatch(postActions.searchPost(e.target.value));
+  };
+
   return (
     <div>
       <Search>
@@ -55,6 +63,7 @@ const SearchField = () => {
         <StyledInputBase
           placeholder='Search…'
           inputProps={{ 'aria-label': 'search' }}
+          onChange={search}
         />
       </Search>
     </div>

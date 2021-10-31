@@ -7,7 +7,7 @@ const index = () => {
   return (
     <Box>
       <Container component='div' maxWidth='xs'>
-        <Typography variant='h4' noWrap align='center'>
+        <Typography variant='h4' align='center' sx={{ marginTop: 5 }}>
           Please Login
         </Typography>
         <LoginForm />
