@@ -1,5 +1,13 @@
 import { FC } from 'react';
-import { Box, TextField, Typography } from '@mui/material';
+import {
+  Box,
+  TextField,
+  Typography,
+  FormControl,
+  InputLabel,
+  Input,
+  FormHelperText,
+} from '@mui/material';
 
 const NewPost: FC = () => {
   return (
@@ -16,14 +24,21 @@ const NewPost: FC = () => {
         New Post
       </Typography>
       <Box component='form'>
-        <TextField
-          error
-          id='outlined-error-helper-text'
-          label='Error'
-          fullWidth
-          defaultValue='Hello World'
-          helperText='Incorrect entry.'
-        />
+        <FormControl>
+          <TextField
+            size='small'
+            label='Error'
+            fullWidth
+            defaultValue='Hello World'
+          />
+        </FormControl>
+        <FormControl variant='filled' size='small' fullWidth color='secondary'>
+          <InputLabel htmlFor='my-input'>Email address</InputLabel>
+          <Input id='my-input' aria-describedby='my-helper-text' />
+          <FormHelperText id='my-helper-text'>
+            We'll never share your email.
+          </FormHelperText>
+        </FormControl>
       </Box>
     </Box>
   );

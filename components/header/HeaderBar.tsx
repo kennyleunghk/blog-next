@@ -39,7 +39,7 @@ const HeaderBar: FC = () => {
               flexGrow: 1,
               display: { xs: 'none', sm: 'block' },
             }}>
-            <Link href='/'>{process.env.BLOG_NAME}</Link>
+            <Link href='/'>Kenny Blog</Link>
           </Typography>
 
           {/* search field */}
