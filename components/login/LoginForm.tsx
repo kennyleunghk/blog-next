@@ -7,6 +7,7 @@ import React, {
   FormEvent,
   FocusEvent,
 } from 'react';
+import jwt, { JwtPayload, Jwt } from 'jsonwebtoken';
 import { useSelector, useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 import { useHttp } from '../../hooks/useHttp';
@@ -51,9 +52,17 @@ const LoginForm: FC = () => {
   }, [data]);
 
   useEffect(() => {
-    console.log(isLoggedIn);
+    // setAutoLogout
     if (isLoggedIn === true) {
       router.push('/');
+      const storedToken: string = localStorage.getItem('token');
+      const praseToken: JwtPayload = jwt.decode(storedToken, {
+        complete: true,
+      }).payload;
+      const logoutTime = praseToken.exp - praseToken.iat;
+      setTimeout(() => {
+        dispatch(authActions.logout());
+      }, logoutTime * 1000);
     }
   }, [isLoggedIn]);
 
@@ -85,16 +94,13 @@ const LoginForm: FC = () => {
 
   const submitHandler = async (event: FormEvent) => {
     event.preventDefault();
-    console.log('prevent default');
     const result = await useHttp(
       'post',
       'http://kennyleung-blog.sytes.net:9321/api/user/login',
-      { ...data, Password: md5(data.Password) }
+      { body: { ...data, Password: md5(data.Password) } },
     );
     if (result) {
-      console.log('result');
       await localStorage.setItem('token', result.token);
-      console.log(localStorage.getItem('token'));
       await dispatch(authActions.loggedIn());
     }
   };
@@ -135,8 +141,7 @@ const LoginForm: FC = () => {
         sx={{ display: 'block', margin: 'auto', marginTop: 2 }}
         disabled={
           invalidPassword === false && invalidId === false ? false : true
-        }
-      >
+        }>
         Sign In
       </Button>
     </Box>

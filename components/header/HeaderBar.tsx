@@ -27,8 +27,7 @@ const HeaderBar: FC = () => {
               sx={{
                 marginRight: 2,
               }}
-              onClick={() => router.push('NewPost')}
-            >
+              onClick={() => router.push('NewPost')}>
               New
             </Button>
           )}
@@ -39,9 +38,8 @@ const HeaderBar: FC = () => {
             sx={{
               flexGrow: 1,
               display: { xs: 'none', sm: 'block' },
-            }}
-          >
-            <Link href='/'>Kenny Leung Blog</Link>
+            }}>
+            <Link href='/'>{process.env.BLOG_NAME}</Link>
           </Typography>
 
           {/* search field */}

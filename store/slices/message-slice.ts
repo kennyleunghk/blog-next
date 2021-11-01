@@ -6,8 +6,8 @@ interface InitialState {
 }
 
 const initialState = {
-  msg: 'success message',
-  type: 'success',
+  msg: null,
+  type: null,
 } as InitialState;
 
 const messageSlice = createSlice({
@@ -25,6 +25,10 @@ const messageSlice = createSlice({
     setSuccess: (state, action: PayloadAction<string>) => {
       state.type = 'success';
       state.msg = action.payload;
+    },
+    clearMessage: (state) => {
+      state.type = null;
+      state.msg = null;
     },
   },
 });

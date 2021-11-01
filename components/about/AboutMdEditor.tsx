@@ -1,75 +1,78 @@
-import React, { FC, Ref, useEffect, useRef, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import axios from 'axios';
-import { rootState } from '../../store';
+import React, { FC } from 'react';
+import { useDispatch } from 'react-redux';
+import { useHttp } from '../../hooks/useHttp';
 import { messageActions } from '../../store/slices/message-slice';
 import dynamic from 'next/dynamic';
-import Button from '@mui/material/Button';
+import { Box, Button } from '@mui/material';
 import { aboutActions } from '../../store/slices/about-slice';
+import SendIcon from '@mui/icons-material/Send';
 
 import '@uiw/react-md-editor/markdown-editor.css';
 import '@uiw/react-markdown-preview/markdown.css';
-
 interface props {
   markdownData: string;
 }
 
 const MDEditor = dynamic(
   () => import('@uiw/react-md-editor').then((mod) => mod.default),
-  { ssr: false }
+  { ssr: false },
 );
 
 const AboutMdEditor: FC<props> = ({ markdownData }) => {
-  const markdown = useRef<HTMLElement | null>();
-  // const markdownData = useSelector(
-  //   (state: rootState) => state.about.markdownData
-  // );
   const dispatch = useDispatch();
 
-  // const sendToServer = async () => {
-  //   const token = localStorage.getItem('token');
-
-  //   const option = {
-  //     headers: {
-  //       Authorization: token,
-  //     },
-  //   };
-
-  //   axios
-  //     .patch(URL + 'api/about/update', { Describes: data }, option)
-  //     .then((res) => {
-  //       dispatch(messageActions.setSuccess(res.data.msg));
-  //     })
-  //     .catch((err) => {
-  //       if (err.message.includes('401')) {
-  //         setError('You are not logged in');
-  //       } else {
-  //         setError('Server error! Please contact System Administrator');
-  //       }
-  //     });
-  // };
-  const formSubmitHandler = (e) => {
-    e.preventDefault();
+  const sendToServer = async () => {
+    const token = localStorage.getItem('token');
+    const option = {
+      headers: { Authorization: token },
+      body: { Describes: markdownData },
+    };
+    try {
+      const result = await useHttp('patch', '', option);
+      if (result) {
+        dispatch(messageActions.setSuccess(result.msg));
+      }
+    } catch (error) {
+      console.log(error);
+      if (error.message.includes('401')) {
+        await messageActions.setError('You are not logged in');
+      } else {
+        await messageActions.setError(
+          'Server error! Please contact System Administrator',
+        );
+      }
+    }
   };
 
-  const updateMarkdownData = (e) => {
+  const updateMarkdownData = (e: string) => {
     dispatch(aboutActions.setMarkdownData(e));
   };
 
   return (
-    <div>
-      <form onSubmit={formSubmitHandler}>
+    <Box sx={{ marginBottom: 10 }}>
+      <Box>
         <MDEditor
           value={markdownData}
           height='600'
           onChange={updateMarkdownData}
         />
-        <hr></hr>
-        <Button variant='contained' type='submit'>
-          Submit
+      </Box>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'end',
+          marginTop: 2,
+        }}>
+        <Button
+          variant='contained'
+          color='success'
+          startIcon={<SendIcon />}
+          onClick={sendToServer}
+          sx={{ fontWeight: 'bold' }}>
+          Send
         </Button>
-      </form>
-    </div>
+      </Box>
+    </Box>
   );
 };
 

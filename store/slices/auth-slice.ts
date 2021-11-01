@@ -13,10 +13,10 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     loggedIn: (state) => {
-      console.log('dispat reducer');
       state.isLoggedIn = true;
     },
     logout: (state) => {
+      console.log('slice set logut');
       state.isLoggedIn = false;
     },
   },

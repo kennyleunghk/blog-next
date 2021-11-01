@@ -1,7 +1,9 @@
+import { NextPage } from 'next';
 import React from 'react';
+import NewPost from '../../components/post/NewPost';
 
-const index = () => {
-  return <div>New Post</div>;
+const index: NextPage = () => {
+  return <NewPost />;
 };
 
 export default index;

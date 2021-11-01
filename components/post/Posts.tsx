@@ -2,7 +2,7 @@ import React, { FC, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { PostModel } from '../../models/PostModel';
 import { styled } from '@mui/material/styles';
-import { Stack } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 import PostCard from './PostCard';
 import { rootState } from '../../store';
 
@@ -16,16 +16,15 @@ const Posts = () => {
   const showPosts = useSelector((state: rootState) => state.post.showPosts);
 
   return (
-    <PostsWrapper>
-      <Stack
-        direction={{ xs: 'column', sm: 'column', md: 'row' }}
-        spacing={{ xs: 2, sm: 2, md: 5 }}
-      >
-        {showPosts.map((post: PostModel) => (
-          <PostCard key={post.Id} post={post} />
-        ))}
-      </Stack>
-    </PostsWrapper>
+    <Stack
+      direction={{ xs: 'column', sm: 'column', md: 'row' }}
+      justifyContent='center'
+      alignItems='center'
+      spacing={{ xs: 2, sm: 2, md: 5 }}>
+      {showPosts.map((post: PostModel) => (
+        <PostCard key={post.Id} post={post} />
+      ))}
+    </Stack>
   );
 };
 
