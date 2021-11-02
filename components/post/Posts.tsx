@@ -17,10 +17,12 @@ const Posts = () => {
 
   return (
     <Stack
-      direction={{ xs: 'column', sm: 'column', md: 'row' }}
+      direction={{ xs: 'column', sm: 'column', md: 'column', lg: 'row' }}
       justifyContent='center'
       alignItems='center'
-      spacing={{ xs: 2, sm: 2, md: 5 }}>
+      spacing={{ xs: 2, sm: 2, md: 5 }}
+      paddingBottom='30px'
+    >
       {showPosts.map((post: PostModel) => (
         <PostCard key={post.Id} post={post} />
       ))}

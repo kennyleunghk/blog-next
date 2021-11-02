@@ -6,20 +6,10 @@ import ImageUpload from './ImageUpload';
 import dynamic from 'next/dynamic';
 
 import classes from '../../styles/about/ProfileImage.module.css';
-import '@uiw/react-md-editor/markdown-editor.css';
-import '@uiw/react-markdown-preview/markdown.css';
-
-const Markdown = dynamic(
-  (): any => import('@uiw/react-md-editor').then((mod) => mod.default.Markdown),
-  { ssr: false },
-);
 
 const ProfileImage = () => {
   const isLoggedIn = useSelector((state: rootState) => state.auth.isLoggedIn);
 
-  const markdownData = useSelector(
-    (state: rootState) => state.about.markdownData,
-  );
   const picture = useSelector((state: rootState) => state.about.picture);
 
   return (
@@ -31,12 +21,6 @@ const ProfileImage = () => {
         />
         {isLoggedIn === true ? <ImageUpload /> : null}
       </div>
-
-      {isLoggedIn ? (
-        <AboutMdEditor markdownData={markdownData} />
-      ) : (
-        <Markdown source={markdownData} />
-      )}
     </div>
   );
 };

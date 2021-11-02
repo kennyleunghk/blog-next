@@ -2,7 +2,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { FC, useEffect } from 'react';
 import Header from '../header';
 import Footer from '../footer';
-import { Container, Box, Alert, AlertProps } from '@mui/material';
+import { Container, Box, Paper, Alert, AlertProps } from '@mui/material';
 import { rootState } from '../../store';
 import { messageActions } from '../../store/slices/message-slice';
 
@@ -21,6 +21,7 @@ const Layout: FC = ({ children }) => {
   const dispatch = useDispatch();
   const alertType = {
     severity: message.type,
+    sx: { display: 'flex', justifyContent: 'center' },
   } as AlertProps;
 
   useEffect(() => {
@@ -34,18 +35,22 @@ const Layout: FC = ({ children }) => {
   return (
     <Box minHeight='100vh' bgcolor='#F0F0F0'>
       <Header />
-      <Container component='div' maxWidth='lg'>
+      <Container component='div' maxWidth='lg' sx={{ paddingBottom: 10 }}>
         <Box
           sx={{
             minHeight: 30,
-            maxHeight: 30,
-            marginTop: 1,
-          }}>
+            maxHeight: 48,
+            marginTop: '0.5rem',
+            alignItems: 'center',
+          }}
+        >
           {message.type !== null && (
             <Alert {...alertType}>{message.msg.substr(0, 100)}</Alert>
           )}
         </Box>
-        <Box sx={{ marginTop: 4 }}>{children}</Box>
+        <Paper sx={{ minHeight: 700, marginTop: 1, padding: '1rem 1rem' }}>
+          {children}
+        </Paper>
       </Container>
       <Footer />
     </Box>

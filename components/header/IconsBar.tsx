@@ -6,6 +6,7 @@ import { authActions } from '../../store/slices/auth-slice';
 import { rootState } from '../../store';
 
 import Stack from '@mui/material/Stack';
+import LoginIcon from '@mui/icons-material/Login';
 import IconButton from '@mui/material/IconButton';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import InfoIcon from '@mui/icons-material/Info';
@@ -57,7 +58,7 @@ const IconsBar = () => {
           color='inherit'
           onClick={logoff}
         >
-          <ExitToAppIcon>Log off</ExitToAppIcon>
+          <ExitToAppIcon />
         </IconButton>
       ) : (
         <IconButton
@@ -68,7 +69,7 @@ const IconsBar = () => {
           color='inherit'
           onClick={() => router.push('/Login')}
         >
-          <AccountCircle />
+          <LoginIcon />
         </IconButton>
       )}
     </Stack>

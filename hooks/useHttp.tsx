@@ -27,11 +27,12 @@ export const useHttp: (method: string, path: string, payload: any) => any =
           } else {
             switch (method.trim().toLowerCase()) {
               case 'post': {
+                console.log('post');
                 console.log(payload.body);
                 const result = await axios.post(
                   path,
                   payload.body,
-                  payload.header,
+                  payload.header
                 );
                 return await result.data;
               }

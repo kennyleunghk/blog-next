@@ -13,9 +13,9 @@ interface props {
   markdownData: string;
 }
 
-const MDEditor = dynamic(
+const MDEditor: any = dynamic(
   () => import('@uiw/react-md-editor').then((mod) => mod.default),
-  { ssr: false },
+  { ssr: false }
 );
 
 const AboutMdEditor: FC<props> = ({ markdownData }) => {
@@ -38,7 +38,7 @@ const AboutMdEditor: FC<props> = ({ markdownData }) => {
         await messageActions.setError('You are not logged in');
       } else {
         await messageActions.setError(
-          'Server error! Please contact System Administrator',
+          'Server error! Please contact System Administrator'
         );
       }
     }
@@ -48,27 +48,31 @@ const AboutMdEditor: FC<props> = ({ markdownData }) => {
     dispatch(aboutActions.setMarkdownData(e));
   };
 
+  const MDProps = {
+    value: markdownData,
+    height: '600',
+    onChange: updateMarkdownData,
+  };
+
   return (
     <Box sx={{ marginBottom: 10 }}>
       <Box>
-        <MDEditor
-          value={markdownData}
-          height='600'
-          onChange={updateMarkdownData}
-        />
+        <MDEditor {...MDProps} />
       </Box>
       <Box
         sx={{
           display: 'flex',
           justifyContent: 'end',
           marginTop: 2,
-        }}>
+        }}
+      >
         <Button
           variant='contained'
           color='success'
           startIcon={<SendIcon />}
           onClick={sendToServer}
-          sx={{ fontWeight: 'bold' }}>
+          sx={{ fontWeight: 'bold' }}
+        >
           Send
         </Button>
       </Box>

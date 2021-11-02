@@ -97,7 +97,7 @@ const LoginForm: FC = () => {
     const result = await useHttp(
       'post',
       'http://kennyleung-blog.sytes.net:9321/api/user/login',
-      { body: { ...data, Password: md5(data.Password) } },
+      { body: { ...data, Password: md5(data.Password) } }
     );
     if (result) {
       await localStorage.setItem('token', result.token);
@@ -141,7 +141,8 @@ const LoginForm: FC = () => {
         sx={{ display: 'block', margin: 'auto', marginTop: 2 }}
         disabled={
           invalidPassword === false && invalidId === false ? false : true
-        }>
+        }
+      >
         Sign In
       </Button>
     </Box>

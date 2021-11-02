@@ -6,8 +6,8 @@ interface InitialState {
 }
 
 const initialState = {
-  msg: null,
-  type: null,
+  msg: 'sdsasdsd',
+  type: 'error',
 } as InitialState;
 
 const messageSlice = createSlice({
