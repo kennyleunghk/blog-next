@@ -10,6 +10,7 @@ import HeaderBar from './HeaderBar';
 import CategoryBar from './CategoryBar';
 import { CategoryModel } from '../../models/CategoryModel';
 import { rootState } from '../../store';
+import { BACKEND } from '../../config';
 
 const Head = styled('div')(({ theme }) => ({
   width: '100%',
@@ -20,51 +21,61 @@ const Header: FC = () => {
   const cates = useSelector((state: rootState) => state.post.categories);
 
   useEffect(() => {
-    const fetchInitData = async () => {
-      try {
-        const categories: any = await useHttp(
-          'get',
-          'http://kennyleung-blog.sytes.net:9321/api/LoadData/categories',
-          null
-        );
-        if (categories) {
-          dispatch(postActions.setCategories(categories));
-        }
-
-        const posts: any = await useHttp(
-          'get',
-          'http://kennyleung-blog.sytes.net:9321/api/LoadData/Posts',
-          null
-        );
-        if (posts) {
-          dispatch(postActions.getPost(posts));
-        }
-
-        const about: any = await useHttp(
-          'get',
-          'http://kennyleung-blog.sytes.net:9321/api/LoadData/AboutMe',
-          null
-        );
-        if (about) {
-          dispatch(aboutActions.getAboutMe(about[0]));
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
     fetchInitData();
-
-    // const storedToken: any = localStorage.getItem('token');
-    // if (storedToken !== undefined && storedToken !== null) {
-    //   const token = storedToken.split(' ');
-    //   const expired: any = jwt.decode(token[1]);
-    //   if (expired) {
-    //     if (expired.exp > Math.floor(Date.now() / 1000)) {
-    //       dispatch(authActions.isLoggedIn());
-    //     }
-    //   }
-    // }
+    checkLogin();
   }, []);
+
+  async function fetchInitData() {
+    try {
+      const categories: any = await useHttp(
+        'get',
+        `${BACKEND}/LoadData/categories`,
+        null
+      );
+      if (categories) {
+        dispatch(postActions.setCategories(categories));
+      }
+
+      const posts: any = await useHttp(
+        'get',
+        `${BACKEND}/LoadData/Posts`,
+        null
+      );
+      if (posts) {
+        dispatch(postActions.getPost(posts));
+      }
+
+      const about: any = await useHttp(
+        'get',
+        `${BACKEND}/LoadData/AboutMe`,
+        null
+      );
+      if (about) {
+        dispatch(aboutActions.getAboutMe(about[0]));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function checkLogin() {
+    // get the token
+    const token = jwt.decode(localStorage.getItem('token'));
+    // if token available
+    if (token) {
+      // set auth
+      dispatch(authActions.loggedIn());
+      // get the current time and change it to number format
+      const currentTime = new Date().valueOf();
+      // count the differency
+      const logoutTime = token.exp * 1000 - currentTime;
+
+      // set timeout to logout
+      setTimeout(() => {
+        dispatch(authActions.logout());
+      }, logoutTime);
+    }
+  }
 
   return (
     <Head>

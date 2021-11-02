@@ -52,17 +52,9 @@ const LoginForm: FC = () => {
   }, [data]);
 
   useEffect(() => {
-    // setAutoLogout
+    // route to home page when login successful
     if (isLoggedIn === true) {
       router.push('/');
-      const storedToken: string = localStorage.getItem('token');
-      const praseToken: JwtPayload = jwt.decode(storedToken, {
-        complete: true,
-      }).payload;
-      const logoutTime = praseToken.exp - praseToken.iat;
-      setTimeout(() => {
-        dispatch(authActions.logout());
-      }, logoutTime * 1000);
     }
   }, [isLoggedIn]);
 
@@ -75,7 +67,6 @@ const LoginForm: FC = () => {
   };
 
   const firstInputHandler = () => {
-    console.log('executed');
     setTouch(true);
   };
 
@@ -100,8 +91,24 @@ const LoginForm: FC = () => {
       { body: { ...data, Password: md5(data.Password) } }
     );
     if (result) {
+      // set token to localStorage
       await localStorage.setItem('token', result.token);
+      // set state
       await dispatch(authActions.loggedIn());
+
+      // decode token to count the auto logout seconds
+      const praseToken: JwtPayload = jwt.decode(result.token, {
+        complete: true,
+      }).payload;
+
+      // count the seconds
+      const logoutTime = praseToken.exp - praseToken.iat;
+      console.log(logoutTime);
+
+      // set timeout to logout
+      setTimeout(() => {
+        dispatch(authActions.logout());
+      }, logoutTime * 1000);
     }
   };
 
