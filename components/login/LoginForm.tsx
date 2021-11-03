@@ -13,6 +13,7 @@ import { useRouter } from 'next/router';
 import { useHttp } from '../../hooks/useHttp';
 import md5 from 'md5';
 import { rootState } from '../../store';
+import { BACKEND } from '../../config';
 
 import Box from '@mui/material/Box';
 import { Divider, TextField, Button } from '@mui/material';
@@ -85,11 +86,10 @@ const LoginForm: FC = () => {
 
   const submitHandler = async (event: FormEvent) => {
     event.preventDefault();
-    const result = await useHttp(
-      'post',
-      'http://kennyleung-blog.sytes.net:9321/api/user/login',
-      { body: { ...data, Password: md5(data.Password) } }
-    );
+    console.log(md5(data.Password));
+    const result = await useHttp('post', `${BACKEND}/user/login`, {
+      body: { ...data, Password: md5(data.Password) },
+    });
     if (result) {
       // set token to localStorage
       await localStorage.setItem('token', result.token);
@@ -148,8 +148,7 @@ const LoginForm: FC = () => {
         sx={{ display: 'block', margin: 'auto', marginTop: 2 }}
         disabled={
           invalidPassword === false && invalidId === false ? false : true
-        }
-      >
+        }>
         Sign In
       </Button>
     </Box>

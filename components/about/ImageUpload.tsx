@@ -33,9 +33,9 @@ const ImageUpload = () => {
     console.log(await tempForm);
     try {
       const result = await axios.post(
-        'http://localhost:5000/api/upload/image_upload',
+        `${BACKEND}/upload/image_upload`,
         tempForm,
-        option
+        option,
       );
 
       if (result.data.success) {
