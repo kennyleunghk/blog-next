@@ -4,6 +4,7 @@ import { rootState } from '../../store';
 import AboutMdEditor from './AboutMdEditor';
 import ImageUpload from './ImageUpload';
 import dynamic from 'next/dynamic';
+import ImagePreview from '../ImagePreview';
 
 import classes from '../../styles/about/ProfileImage.module.css';
 
@@ -15,10 +16,7 @@ const ProfileImage = () => {
   return (
     <div className={classes['profile-wrapper']}>
       <div className={classes['profile-picture']}>
-        <img
-          src={`http://kennyleung-blog.sytes.net:9321/Static/Images/${picture}`}
-          alt='Kenny Leung'
-        />
+        <ImagePreview path={picture} />
         {isLoggedIn === true ? <ImageUpload /> : null}
       </div>
     </div>

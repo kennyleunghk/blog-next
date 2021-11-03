@@ -3,7 +3,6 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 const initialState = {
   picture: '',
   markdownData: '',
-  tempPicture: '',
   tempMarkdownData: '',
 };
 
@@ -18,6 +17,9 @@ const aboutSlice = createSlice({
       const { Picture, Describes } = action.payload;
       state.picture = Picture;
       state.markdownData = Describes;
+    },
+    setPicture: (state, action: PayloadAction<string>) => {
+      state.picture = action.payload;
     },
     setMarkdownData: (state, action: PayloadAction<string>) => {
       state.markdownData = action.payload;

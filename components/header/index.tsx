@@ -1,7 +1,7 @@
 import React, { FC, useEffect } from 'react';
 import { useHttp } from '../../hooks/useHttp';
 import { useDispatch, useSelector } from 'react-redux';
-import jwt from 'jsonwebtoken';
+import jwt, { DecodeOptions, Jwt, JwtPayload } from 'jsonwebtoken';
 import { authActions } from '../../store/slices/auth-slice';
 import { postActions } from '../../store/slices/post-slice';
 import { aboutActions } from '../../store/slices/about-slice';
@@ -11,6 +11,7 @@ import CategoryBar from './CategoryBar';
 import { CategoryModel } from '../../models/CategoryModel';
 import { rootState } from '../../store';
 import { BACKEND } from '../../config';
+import { AppProps } from 'next/dist/shared/lib/router/router';
 
 const Head = styled('div')(({ theme }) => ({
   width: '100%',
@@ -18,8 +19,6 @@ const Head = styled('div')(({ theme }) => ({
 
 const Header: FC = () => {
   const dispatch = useDispatch();
-  const cates = useSelector((state: rootState) => state.post.categories);
-
   useEffect(() => {
     fetchInitData();
     checkLogin();
@@ -60,7 +59,9 @@ const Header: FC = () => {
 
   async function checkLogin() {
     // get the token
-    const token = jwt.decode(localStorage.getItem('token'));
+    const token: Jwt = jwt.decode(localStorage.getItem('token'), {
+      complete: true,
+    });
     // if token available
     if (token) {
       // set auth
@@ -68,7 +69,7 @@ const Header: FC = () => {
       // get the current time and change it to number format
       const currentTime = new Date().valueOf();
       // count the differency
-      const logoutTime = token.exp * 1000 - currentTime;
+      const logoutTime = token.payload.exp * 1000 - currentTime;
 
       // set timeout to logout
       setTimeout(() => {

@@ -38,7 +38,7 @@ const MDEditor: any = dynamic(
 const NewPost: FC = () => {
   const [newPostFormData, setNewPostFormData] = useState<NewPostModel>({
     Title: '',
-    Image: {},
+    Image: '',
     Description: '',
     Tags: '',
     Category: 0,
@@ -119,7 +119,7 @@ const NewPost: FC = () => {
         size='small'
         onChange={(e) => formUpdateHandler(e, 'image')}
       />
-      {newPostFormData.Image !== {} && <img src={newPostFormData.Image.name} />}
+      {newPostFormData.Image !== '' && <img src={newPostFormData.Image} />}
       <TextField
         {...textFieldProps}
         id='title'

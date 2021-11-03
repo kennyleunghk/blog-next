@@ -16,7 +16,7 @@ import '@uiw/react-md-editor/markdown-editor.css';
 import '@uiw/react-markdown-preview/markdown.css';
 import dynamic from 'next/dynamic';
 
-const Markdown = dynamic(
+const Markdown: any = dynamic(
   (): any => import('@uiw/react-md-editor').then((mod) => mod.default.Markdown),
   { ssr: false }
 );
@@ -27,6 +27,7 @@ interface AppProps {
 
 const PostDetail: FC<AppProps> = ({ post }) => {
   const isLoggedIn = useSelector((state: rootState) => state.auth.isLoggedIn);
+  const props = {};
   return (
     <Grid container spacing={3}>
       <Grid item xs={12}>

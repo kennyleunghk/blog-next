@@ -1,6 +1,6 @@
 export interface NewPostModel {
   Title: string | null;
-  Image: object | {};
+  Image?: string;
   Description: string | null;
   Tags: string | null;
   Category: number | null;

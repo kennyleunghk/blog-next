@@ -1,4 +1,9 @@
-import axios from 'axios';
+import axios, { AxiosResponse, AxiosResponseHeaders } from 'axios';
+import { BACKEND } from '../config';
+
+interface AxiosResult extends AxiosResponse {
+  data: any;
+}
 
 export const useHttp: (method: string, path: string, payload: any) => any =
   async (method: string, path: string, payload: any) => {
@@ -52,3 +57,30 @@ export const useHttp: (method: string, path: string, payload: any) => any =
       }
     }
   };
+
+export const useImageUpload = async (image: File) => {
+  const token: string = await localStorage.getItem('token');
+  const tempForm = new FormData();
+  await tempForm.append('file', image);
+  const headers = {
+    Authorization: token,
+    'Content-Type': 'multipart/form-data',
+  };
+
+  if (image.type.includes('image')) {
+    try {
+      const result: AxiosResult = await axios.post(
+        `${BACKEND}/upload/image_upload`,
+        tempForm,
+        { headers }
+      );
+      if (result.statusText === 'OK' && result.data.success) {
+        return result.data;
+      }
+    } catch (error) {
+      return error;
+    }
+  } else {
+    return { error: 'File type is not image!' };
+  }
+};
