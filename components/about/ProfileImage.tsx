@@ -14,12 +14,12 @@ const ProfileImage = () => {
   const picture = useSelector((state: rootState) => state.about.picture);
 
   return (
-    <div className={classes['profile-wrapper']}>
-      <div className={classes['profile-picture']}>
-        <ImagePreview path={picture} />
-        {isLoggedIn === true ? <ImageUpload /> : null}
-      </div>
-    </div>
+    <ImagePreview
+      path={
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHs59XIBm88TPStgRmtvQi56dH_mFdiPhjcQ&usqp=CAU'
+      }
+      avatar
+    />
   );
 };
 

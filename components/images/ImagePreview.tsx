@@ -1,8 +1,11 @@
 import React, { FC } from 'react';
 import { STATIC_FOLDER } from '../../config';
-import { borderRadius, Box } from '@mui/system';
+import { Box } from '@mui/system';
+import { Button } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import CancelIcon from '@mui/icons-material/Cancel';
+import PhotoCamera from '@mui/icons-material/PhotoCamera';
+import { styled } from '@mui/styles';
 
 interface ImagePreviewProps {
   path: string;
@@ -11,29 +14,16 @@ interface ImagePreviewProps {
   onClosed?: () => void;
 }
 
+const Input = styled('input')({
+  display: 'none',
+});
+
 const ImagePreview: FC<ImagePreviewProps> = ({
   path,
   avatar,
   size,
   onClosed,
 }) => {
-  // const imageSize = () => {
-  //   switch (size.toLowerCase()) {
-  //     case 'sm': {
-  //       return '100px';
-  //     }
-  //     case 'md': {
-  //       return '200px';
-  //     }
-  //     case 'lg': {
-  //       return '400px';
-  //     }
-  //     default: {
-  //       return '200px';
-  //     }
-  //   }
-  // };
-
   const imageSize = () => {
     if (!size) {
       return '200px';
@@ -53,22 +43,46 @@ const ImagePreview: FC<ImagePreviewProps> = ({
   };
 
   const boxProps = {
-    borderRadius: avatar && '50%',
+    display: avatar && 'flex',
+    alignItems: avatar && 'end',
+    textAlign: !avatar && 'center',
+    justifyContent: avatar && 'center',
   };
 
   return (
-    <Box component='div' sx={{ ...boxProps, textAlign: 'center' }}>
+    <Box component='div' {...boxProps}>
       <img
         height={imageSize()}
-        src={STATIC_FOLDER + path}
+        src={path}
         alt={avatar ? 'prifile-picture' : 'image-preview'}
+        style={{ minHeight: '100px', borderRadius: avatar && '50%' }}
       />
-      <IconButton
-        color='warning'
-        sx={{ position: 'absolute', transform: 'translateX(-100%)' }}
-        onClick={onClosed}>
-        <CancelIcon />
-      </IconButton>
+      {onClosed && (
+        <IconButton
+          color='warning'
+          sx={{ position: 'absolute', transform: 'translateX(-100%)' }}
+          onClick={onClosed && onClosed}>
+          <CancelIcon />
+        </IconButton>
+      )}
+      {avatar && (
+        <label htmlFor='contained-button-file'>
+          <Input
+            accept='image/*'
+            id='contained-button-file'
+            multiple
+            type='file'
+          />
+          <Button
+            variant='contained'
+            component='span'
+            size='small'
+            sx={{ transform: 'translate(-100%, -100%)', position: 'absolute' }}
+            startIcon={<PhotoCamera fontSize='small' />}>
+            <b>Upload</b>
+          </Button>
+        </label>
+      )}
     </Box>
   );
 };
