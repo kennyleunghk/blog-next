@@ -52,13 +52,6 @@ const LoginForm: FC = () => {
     }
   }, [data]);
 
-  useEffect(() => {
-    // route to home page when login successful
-    if (isLoggedIn === true) {
-      router.push('/');
-    }
-  }, [isLoggedIn]);
-
   const setId = (e: ChangeEvent<HTMLInputElement>) => {
     setData({
       ...data,
@@ -86,11 +79,12 @@ const LoginForm: FC = () => {
 
   const submitHandler = async (event: FormEvent) => {
     event.preventDefault();
-    console.log(md5(data.Password));
     const result = await useHttp('post', `${BACKEND}/user/login`, {
       body: { ...data, Password: md5(data.Password) },
     });
     if (result) {
+      // redirect to index page
+      router.push('/');
       // set token to localStorage
       await localStorage.setItem('token', result.token);
       // set state
@@ -103,7 +97,6 @@ const LoginForm: FC = () => {
 
       // count the seconds
       const logoutTime = praseToken.exp - praseToken.iat;
-      console.log(logoutTime);
 
       // set timeout to logout
       setTimeout(() => {

@@ -1,4 +1,4 @@
-import {
+import React, {
   FC,
   useState,
   useEffect,
@@ -6,7 +6,7 @@ import {
   FormEventHandler,
   ChangeEvent,
 } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import useAuth from '../../hooks/useAuth';
 import {
   Box,
@@ -29,10 +29,13 @@ import { NewPostModel } from '../../models/NewPostModel';
 import dynamic from 'next/dynamic';
 import '@uiw/react-md-editor/markdown-editor.css';
 import '@uiw/react-markdown-preview/markdown.css';
+import { useImageUpload } from '../../hooks/useHttp';
+import { messageActions } from '../../store/slices/message-slice';
+import ImagePreview from '../images/ImagePreview';
 
 const MDEditor: any = dynamic(
   () => import('@uiw/react-md-editor').then((mod) => mod.default),
-  { ssr: false }
+  { ssr: false },
 );
 
 const NewPost: FC = () => {
@@ -44,10 +47,7 @@ const NewPost: FC = () => {
     Category: 0,
   });
   const [markdownData, setMarkdownData] = useState('');
-  const [image, setImage] = useState([]);
-  useEffect(() => {
-    console.log(image);
-  }, [image]);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     console.log(newPostFormData);
@@ -65,13 +65,6 @@ const NewPost: FC = () => {
         setNewPostFormData({
           ...newPostFormData,
           Description: e.target.value,
-        });
-        break;
-      case 'image':
-        console.log(e.target.files[0]);
-        setNewPostFormData({
-          ...newPostFormData,
-          Image: e.target.files[0],
         });
         break;
       case 'tags':
@@ -93,8 +86,26 @@ const NewPost: FC = () => {
     }
   };
 
+  const imageUploadHandler = async (e: ChangeEvent<HTMLInputElement>) => {
+    const result = await useImageUpload(e.target.files[0]);
+    if (result.success) {
+      await dispatch(messageActions.setSuccess(result.success));
+      await setNewPostFormData({
+        ...newPostFormData,
+        Image: result.image,
+      });
+    } else {
+      await dispatch(messageActions.setError(result.error));
+      clearImage();
+    }
+  };
+
+  const clearImage = () => {
+    setNewPostFormData({ ...newPostFormData, Image: '' });
+  };
+
   const categories: Array<CategoryModel> = useSelector(
-    (state: rootState) => state.post.categories
+    (state: rootState) => state.post.categories,
   );
   const submitHandler: FormEventHandler = (e: FormEvent<HTMLElement>) => {
     e.preventDefault();
@@ -112,14 +123,12 @@ const NewPost: FC = () => {
       component='form'
       onSubmit={submitHandler}
       autoComplete='off'
-      sx={{ padding: '1rem 1rem' }}
-    >
-      <Input
-        type='file'
-        size='small'
-        onChange={(e) => formUpdateHandler(e, 'image')}
-      />
-      {newPostFormData.Image !== '' && <img src={newPostFormData.Image} />}
+      sx={{ padding: '1rem 1rem' }}>
+      {newPostFormData.Image !== '' ? (
+        <ImagePreview path={newPostFormData.Image} onClosed={clearImage} />
+      ) : (
+        <Input type='file' size='small' onChange={imageUploadHandler} />
+      )}
       <TextField
         {...textFieldProps}
         id='title'
@@ -150,8 +159,7 @@ const NewPost: FC = () => {
       />
       <FormControl
         size='small'
-        sx={{ width: '50%', paddingLeft: 1, margin: '0.8rem 0' }}
-      >
+        sx={{ width: '50%', paddingLeft: 1, margin: '0.8rem 0' }}>
         <InputLabel id='demo-simple-select-label'>
           &nbsp;&nbsp;&nbsp;Category *
         </InputLabel>
@@ -163,8 +171,7 @@ const NewPost: FC = () => {
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
             formUpdateHandler(e, 'category')
           }
-          required
-        >
+          required>
           {categories.map((cate: CategoryModel) => (
             <MenuItem key={cate.id} value={cate.id}>
               {cate.name}
@@ -183,8 +190,7 @@ const NewPost: FC = () => {
         type='submit'
         size='small'
         color='secondary'
-        sx={{ margin: '0.8rem 0' }}
-      >
+        sx={{ margin: '0.8rem 0' }}>
         Submit
       </Button>
     </Box>

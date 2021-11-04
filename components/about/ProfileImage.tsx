@@ -4,7 +4,7 @@ import { rootState } from '../../store';
 import AboutMdEditor from './AboutMdEditor';
 import ImageUpload from './ImageUpload';
 import dynamic from 'next/dynamic';
-import ImagePreview from '../ImagePreview';
+import ImagePreview from '../images/ImagePreview';
 
 import classes from '../../styles/about/ProfileImage.module.css';
 

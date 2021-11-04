@@ -35,7 +35,7 @@ export const useHttp: (method: string, path: string, payload: any) => any =
                 const result = await axios.post(
                   path,
                   payload.body,
-                  payload.header
+                  payload.header,
                 );
                 return await result.data;
               }
@@ -72,13 +72,13 @@ export const useImageUpload = async (image: File) => {
       const result: AxiosResult = await axios.post(
         `${BACKEND}/upload/image_upload`,
         tempForm,
-        { headers }
+        { headers },
       );
       if (result.statusText === 'OK' && result.data.success) {
         return result.data;
       }
     } catch (error) {
-      return error;
+      return { error };
     }
   } else {
     return { error: 'File type is not image!' };

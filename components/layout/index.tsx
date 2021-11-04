@@ -42,10 +42,9 @@ const Layout: FC = ({ children }) => {
             maxHeight: 48,
             marginTop: '0.5rem',
             alignItems: 'center',
-          }}
-        >
+          }}>
           {message.type !== null && (
-            <Alert {...alertType}>{message.msg.substr(0, 100)}</Alert>
+            <Alert {...alertType}>{message.msg.substring(0, 100)}</Alert>
           )}
         </Box>
         <Paper sx={{ minHeight: 700, marginTop: 1, padding: '1rem 1rem' }}>

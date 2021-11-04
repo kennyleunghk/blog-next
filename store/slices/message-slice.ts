@@ -1,13 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface InitialState {
-  type: string | null;
-  msg: string | null;
+  type?: string;
+  msg?: string;
 }
 
 const initialState = {
-  msg: 'sdsasdsd',
-  type: 'error',
+  msg: null,
+  type: null,
 } as InitialState;
 
 const messageSlice = createSlice({
