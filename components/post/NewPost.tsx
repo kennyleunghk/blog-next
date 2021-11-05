@@ -32,10 +32,11 @@ import '@uiw/react-markdown-preview/markdown.css';
 import { useImageUpload } from '../../hooks/useHttp';
 import { messageActions } from '../../store/slices/message-slice';
 import ImagePreview from '../images/ImagePreview';
+import PhotoCamera from '@mui/icons-material/PhotoCamera';
 
 const MDEditor: any = dynamic(
   () => import('@uiw/react-md-editor').then((mod) => mod.default),
-  { ssr: false },
+  { ssr: false }
 );
 
 const NewPost: FC = () => {
@@ -105,7 +106,7 @@ const NewPost: FC = () => {
   };
 
   const categories: Array<CategoryModel> = useSelector(
-    (state: rootState) => state.post.categories,
+    (state: rootState) => state.post.categories
   );
   const submitHandler: FormEventHandler = (e: FormEvent<HTMLElement>) => {
     e.preventDefault();
@@ -123,11 +124,27 @@ const NewPost: FC = () => {
       component='form'
       onSubmit={submitHandler}
       autoComplete='off'
-      sx={{ padding: '1rem 1rem' }}>
+      sx={{ padding: '1rem 1rem' }}
+    >
       {newPostFormData.Image !== '' ? (
         <ImagePreview path={newPostFormData.Image} onClosed={clearImage} />
       ) : (
-        <Input type='file' size='small' onChange={imageUploadHandler} />
+        <label htmlFor='contained-button-file'>
+          <Input
+            id='contained-button-file'
+            type='file'
+            sx={{ display: 'none' }}
+            onChange={imageUploadHandler}
+          />
+          <Button
+            variant='contained'
+            component='span'
+            size='small'
+            startIcon={<PhotoCamera fontSize='small' />}
+          >
+            Upload
+          </Button>
+        </label>
       )}
       <TextField
         {...textFieldProps}
@@ -159,7 +176,8 @@ const NewPost: FC = () => {
       />
       <FormControl
         size='small'
-        sx={{ width: '50%', paddingLeft: 1, margin: '0.8rem 0' }}>
+        sx={{ width: '50%', paddingLeft: 1, margin: '0.8rem 0' }}
+      >
         <InputLabel id='demo-simple-select-label'>
           &nbsp;&nbsp;&nbsp;Category *
         </InputLabel>
@@ -171,7 +189,8 @@ const NewPost: FC = () => {
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
             formUpdateHandler(e, 'category')
           }
-          required>
+          required
+        >
           {categories.map((cate: CategoryModel) => (
             <MenuItem key={cate.id} value={cate.id}>
               {cate.name}
@@ -190,7 +209,8 @@ const NewPost: FC = () => {
         type='submit'
         size='small'
         color='secondary'
-        sx={{ margin: '0.8rem 0' }}>
+        sx={{ margin: '0.8rem 0' }}
+      >
         Submit
       </Button>
     </Box>

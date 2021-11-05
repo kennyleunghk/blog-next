@@ -12,6 +12,7 @@ import { CategoryModel } from '../../models/CategoryModel';
 import { rootState } from '../../store';
 import { BACKEND } from '../../config';
 import { AppProps } from 'next/dist/shared/lib/router/router';
+import { messageActions } from '../../store/slices/message-slice';
 
 const Head = styled('div')(({ theme }) => ({
   width: '100%',
@@ -54,6 +55,7 @@ const Header: FC = () => {
       }
     } catch (error) {
       console.log(error);
+      dispatch(messageActions.setError(error.message));
     }
   }
 

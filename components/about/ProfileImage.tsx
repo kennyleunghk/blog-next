@@ -13,14 +13,7 @@ const ProfileImage = () => {
 
   const picture = useSelector((state: rootState) => state.about.picture);
 
-  return (
-    <ImagePreview
-      path={
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHs59XIBm88TPStgRmtvQi56dH_mFdiPhjcQ&usqp=CAU'
-      }
-      avatar
-    />
-  );
+  return <ImagePreview path={picture} avatar />;
 };
 
 export default ProfileImage;

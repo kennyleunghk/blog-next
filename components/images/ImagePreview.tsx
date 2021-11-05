@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { STATIC_FOLDER } from '../../config';
 import { Box } from '@mui/system';
 import { Button } from '@mui/material';
@@ -24,6 +24,8 @@ const ImagePreview: FC<ImagePreviewProps> = ({
   size,
   onClosed,
 }) => {
+  const [storedImage, setStoredImage] = useState({});
+
   const imageSize = () => {
     if (!size) {
       return '200px';
@@ -50,18 +52,31 @@ const ImagePreview: FC<ImagePreviewProps> = ({
   };
 
   return (
-    <Box component='div' {...boxProps}>
+    <Box
+      component='div'
+      sx={{
+        display: avatar && 'flex',
+        alignItems: avatar && 'end',
+        justifyContent: avatar && 'center',
+        textAlign: 'center',
+      }}
+    >
       <img
         height={imageSize()}
-        src={path}
+        src={STATIC_FOLDER + path}
         alt={avatar ? 'prifile-picture' : 'image-preview'}
-        style={{ minHeight: '100px', borderRadius: avatar && '50%' }}
+        style={{
+          minHeight: '100px',
+          minWidth: '100px',
+          borderRadius: avatar && '50%',
+        }}
       />
       {onClosed && (
         <IconButton
           color='warning'
           sx={{ position: 'absolute', transform: 'translateX(-100%)' }}
-          onClick={onClosed && onClosed}>
+          onClick={onClosed && onClosed}
+        >
           <CancelIcon />
         </IconButton>
       )}
@@ -72,13 +87,15 @@ const ImagePreview: FC<ImagePreviewProps> = ({
             id='contained-button-file'
             multiple
             type='file'
+            onChange={(e) => setStoredImage(e.target.files[0])}
           />
           <Button
             variant='contained'
             component='span'
             size='small'
             sx={{ transform: 'translate(-100%, -100%)', position: 'absolute' }}
-            startIcon={<PhotoCamera fontSize='small' />}>
+            startIcon={<PhotoCamera fontSize='small' />}
+          >
             <b>Upload</b>
           </Button>
         </label>
