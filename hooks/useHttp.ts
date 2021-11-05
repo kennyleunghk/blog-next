@@ -32,19 +32,21 @@ export const useHttp: (method: string, path: string, payload: any) => any =
           } else {
             switch (method.trim().toLowerCase()) {
               case 'post': {
-                const result = await axios.post(
-                  path,
-                  payload.body,
-                  payload.header,
-                );
+                const result = await axios.post(path, payload.body, {
+                  headers: payload.header,
+                });
                 return await result.data;
               }
               case 'put': {
-                const result = axios.put(path, payload.body, payload.header);
+                const result = axios.put(path, payload.body, {
+                  headers: payload.headers,
+                });
                 return result;
               }
               case 'patch': {
-                const result = axios.patch(path, payload.body, payload.header);
+                const result = axios.patch(path, payload.body, {
+                  headers: payload.header,
+                });
                 return result;
               }
               case 'delete': {

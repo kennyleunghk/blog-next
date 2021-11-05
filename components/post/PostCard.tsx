@@ -5,6 +5,7 @@ import { styled } from '@mui/styles';
 import { Card, CardMedia, CardHeader, CardContent } from '@mui/material';
 import Typography, { TypographyProps } from '@mui/material/Typography';
 import Box, { BoxProps } from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
 import moment from 'moment';
 import Link from 'next/link';
 
@@ -31,8 +32,7 @@ export const PostCard: FC<AppProps> = ({ post }) => {
         fontStyle: 'italic',
       }}
       component='div'
-      align='center'
-    >
+      align='center'>
       {post.Title}
     </Typography>
   );
@@ -42,8 +42,8 @@ export const PostCard: FC<AppProps> = ({ post }) => {
   };
 
   return (
-    <div className='col-sm-12 col-md-12 col-lg-6'>
-      <Card className={classes['post-card']} sx={{ width: 500 }}>
+    <Grid item xs={12} sm={12} md={12} lg={6}>
+      <Card className={classes['post-card']} sx={{ width: 400 }}>
         <CardHeader title={CardHeaderTitle} className={classes['post-title']} />
         <CardMedia
           component='img'
@@ -63,8 +63,7 @@ export const PostCard: FC<AppProps> = ({ post }) => {
               sx={{
                 fontStyle: 'italic',
                 fontSize: '0.8rem',
-              }}
-            >
+              }}>
               {post.Description}
             </Typography>
           </Box>
@@ -75,8 +74,7 @@ export const PostCard: FC<AppProps> = ({ post }) => {
               rowGap: 1,
               gridTemplateColumns: 'repeat(2, 1fr)',
               marginTop: '1rem',
-            }}
-          >
+            }}>
             <Typography variant='body2' align='left' fontSize='0.8rem'>
               Kenny Leung
             </Typography>
@@ -126,7 +124,7 @@ export const PostCard: FC<AppProps> = ({ post }) => {
           </Row> */}
         </CardContent>
       </Card>
-    </div>
+    </Grid>
   );
 };
 

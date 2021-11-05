@@ -1,6 +1,7 @@
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { rootState } from '../store';
+
 const useAuth = (WrappedComponent) => {
   return (props) => {
     const isLoggedIn = useSelector((state: rootState) => state.auth.isLoggedIn);
@@ -10,8 +11,8 @@ const useAuth = (WrappedComponent) => {
       const token = localStorage.getItem('token');
 
       // If there is no access token we redirect to "/" page.
-      if (!isLoggedIn || !token) {
-        Router.replace('/Login');
+      if (!token) {
+        Router.push('/Login');
         return null;
       }
       return <WrappedComponent {...props} />;

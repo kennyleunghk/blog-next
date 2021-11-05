@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { NextPage } from 'next';
 import { useSelector } from 'react-redux';
 import Posts from '../components/post/Posts';

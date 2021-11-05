@@ -14,10 +14,6 @@ interface ImagePreviewProps {
   onClosed?: () => void;
 }
 
-const Input = styled('input')({
-  display: 'none',
-});
-
 const ImagePreview: FC<ImagePreviewProps> = ({
   path,
   avatar,
@@ -44,23 +40,15 @@ const ImagePreview: FC<ImagePreviewProps> = ({
     }
   };
 
-  const boxProps = {
-    display: avatar && 'flex',
-    alignItems: avatar && 'end',
-    textAlign: !avatar && 'center',
-    justifyContent: avatar && 'center',
-  };
-
   return (
     <Box
       component='div'
       sx={{
-        display: avatar && 'flex',
-        alignItems: avatar && 'end',
-        justifyContent: avatar && 'center',
+        // display: avatar && 'flex',
+        // alignItems: avatar && 'end',
+        // justifyContent: avatar && 'center',
         textAlign: 'center',
-      }}
-    >
+      }}>
       <img
         height={imageSize()}
         src={STATIC_FOLDER + path}
@@ -75,30 +63,9 @@ const ImagePreview: FC<ImagePreviewProps> = ({
         <IconButton
           color='warning'
           sx={{ position: 'absolute', transform: 'translateX(-100%)' }}
-          onClick={onClosed && onClosed}
-        >
+          onClick={onClosed && onClosed}>
           <CancelIcon />
         </IconButton>
-      )}
-      {avatar && (
-        <label htmlFor='contained-button-file'>
-          <Input
-            accept='image/*'
-            id='contained-button-file'
-            multiple
-            type='file'
-            onChange={(e) => setStoredImage(e.target.files[0])}
-          />
-          <Button
-            variant='contained'
-            component='span'
-            size='small'
-            sx={{ transform: 'translate(-100%, -100%)', position: 'absolute' }}
-            startIcon={<PhotoCamera fontSize='small' />}
-          >
-            <b>Upload</b>
-          </Button>
-        </label>
       )}
     </Box>
   );

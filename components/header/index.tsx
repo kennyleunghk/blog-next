@@ -30,7 +30,7 @@ const Header: FC = () => {
       const categories: any = await useHttp(
         'get',
         `${BACKEND}/LoadData/categories`,
-        null
+        null,
       );
       if (categories) {
         dispatch(postActions.setCategories(categories));
@@ -39,19 +39,10 @@ const Header: FC = () => {
       const posts: any = await useHttp(
         'get',
         `${BACKEND}/LoadData/Posts`,
-        null
+        null,
       );
       if (posts) {
         dispatch(postActions.getPost(posts));
-      }
-
-      const about: any = await useHttp(
-        'get',
-        `${BACKEND}/LoadData/AboutMe`,
-        null
-      );
-      if (about) {
-        dispatch(aboutActions.getAboutMe(about[0]));
       }
     } catch (error) {
       console.log(error);

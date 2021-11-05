@@ -29,20 +29,21 @@ import { NewPostModel } from '../../models/NewPostModel';
 import dynamic from 'next/dynamic';
 import '@uiw/react-md-editor/markdown-editor.css';
 import '@uiw/react-markdown-preview/markdown.css';
-import { useImageUpload } from '../../hooks/useHttp';
+import { useHttp, useImageUpload } from '../../hooks/useHttp';
 import { messageActions } from '../../store/slices/message-slice';
 import ImagePreview from '../images/ImagePreview';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
+import { BACKEND } from '../../config';
 
 const MDEditor: any = dynamic(
   () => import('@uiw/react-md-editor').then((mod) => mod.default),
-  { ssr: false }
+  { ssr: false },
 );
 
 const NewPost: FC = () => {
   const [newPostFormData, setNewPostFormData] = useState<NewPostModel>({
     Title: '',
-    Image: '',
+    CoverImg: '',
     Description: '',
     Tags: '',
     Category: 0,
@@ -93,24 +94,30 @@ const NewPost: FC = () => {
       await dispatch(messageActions.setSuccess(result.success));
       await setNewPostFormData({
         ...newPostFormData,
-        Image: result.image,
+        CoverImg: result.image,
       });
     } else {
       await dispatch(messageActions.setError(result.error));
-      clearImage();
     }
   };
 
-  const clearImage = () => {
-    setNewPostFormData({ ...newPostFormData, Image: '' });
-  };
-
   const categories: Array<CategoryModel> = useSelector(
-    (state: rootState) => state.post.categories
+    (state: rootState) => state.post.categories,
   );
   const submitHandler: FormEventHandler = (e: FormEvent<HTMLElement>) => {
     e.preventDefault();
-    console.log('submit');
+    const data = {
+      headers: {
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
+        'Content-Type': 'application/json',
+      },
+      body: {
+        ...newPostFormData,
+        Contents: markdownData,
+      },
+    };
+    const send = useHttp('put', `${BACKEND}/Post/create`, data);
+    console.log(send);
   };
 
   const textFieldProps: TextFieldProps = {
@@ -124,10 +131,17 @@ const NewPost: FC = () => {
       component='form'
       onSubmit={submitHandler}
       autoComplete='off'
-      sx={{ padding: '1rem 1rem' }}
-    >
-      {newPostFormData.Image !== '' ? (
-        <ImagePreview path={newPostFormData.Image} onClosed={clearImage} />
+      sx={{ padding: '1rem 1rem' }}>
+      {newPostFormData.CoverImg !== '' ? (
+        <ImagePreview
+          path={newPostFormData.CoverImg}
+          onClosed={() =>
+            setNewPostFormData({
+              ...newPostFormData,
+              CoverImg: '',
+            })
+          }
+        />
       ) : (
         <label htmlFor='contained-button-file'>
           <Input
@@ -140,8 +154,7 @@ const NewPost: FC = () => {
             variant='contained'
             component='span'
             size='small'
-            startIcon={<PhotoCamera fontSize='small' />}
-          >
+            startIcon={<PhotoCamera fontSize='small' />}>
             Upload
           </Button>
         </label>
@@ -176,8 +189,7 @@ const NewPost: FC = () => {
       />
       <FormControl
         size='small'
-        sx={{ width: '50%', paddingLeft: 1, margin: '0.8rem 0' }}
-      >
+        sx={{ width: '50%', paddingLeft: 1, margin: '0.8rem 0' }}>
         <InputLabel id='demo-simple-select-label'>
           &nbsp;&nbsp;&nbsp;Category *
         </InputLabel>
@@ -189,8 +201,7 @@ const NewPost: FC = () => {
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
             formUpdateHandler(e, 'category')
           }
-          required
-        >
+          required>
           {categories.map((cate: CategoryModel) => (
             <MenuItem key={cate.id} value={cate.id}>
               {cate.name}
@@ -209,8 +220,7 @@ const NewPost: FC = () => {
         type='submit'
         size='small'
         color='secondary'
-        sx={{ margin: '0.8rem 0' }}
-      >
+        sx={{ margin: '0.8rem 0' }}>
         Submit
       </Button>
     </Box>
