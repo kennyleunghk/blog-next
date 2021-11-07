@@ -27,7 +27,6 @@ interface AppProps {
 
 const PostDetail: FC<AppProps> = ({ post }) => {
   const isLoggedIn = useSelector((state: rootState) => state.auth.isLoggedIn);
-  const props = {};
   return (
     <Grid container spacing={3}>
       <Grid item xs={12}>
@@ -82,6 +81,12 @@ const PostDetail: FC<AppProps> = ({ post }) => {
       </Grid>
     </Grid>
   );
+};
+
+export const getStaticProps = async () => {
+  return {
+    props: {},
+  };
 };
 
 export default PostDetail;

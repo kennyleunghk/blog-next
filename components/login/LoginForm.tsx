@@ -86,19 +86,19 @@ const LoginForm: FC = () => {
       // redirect to index page
       router.push('/');
       // set token to localStorage
-      await localStorage.setItem('token', result.token);
+      await localStorage.setItem('token', result.data.token);
       // set state
       await dispatch(authActions.loggedIn());
 
       // decode token to count the auto logout seconds
-      const praseToken: JwtPayload = jwt.decode(result.token, {
+      const praseToken: JwtPayload = jwt.decode(result.data.token, {
         complete: true,
       }).payload;
 
-      // count the seconds
+      // // count the seconds
       const logoutTime = praseToken.exp - praseToken.iat;
 
-      // set timeout to logout
+      // // set timeout to logout
       setTimeout(() => {
         dispatch(authActions.logout());
       }, logoutTime * 1000);
@@ -141,7 +141,8 @@ const LoginForm: FC = () => {
         sx={{ display: 'block', margin: 'auto', marginTop: 2 }}
         disabled={
           invalidPassword === false && invalidId === false ? false : true
-        }>
+        }
+      >
         Sign In
       </Button>
     </Box>

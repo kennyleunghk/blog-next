@@ -5,6 +5,7 @@ import { styled } from '@mui/material/styles';
 import { Box, Stack, Grid } from '@mui/material';
 import PostCard from './PostCard';
 import { rootState } from '../../store';
+import { textAlign } from '@mui/system';
 
 const PostsWrapper = styled('div')(() => ({
   display: 'flex',
@@ -16,7 +17,7 @@ const Posts = () => {
   const showPosts = useSelector((state: rootState) => state.post.showPosts);
 
   return (
-    <Grid container spacing={2}>
+    <Grid container justifyContent='center' spacing={2}>
       {showPosts.map((post: PostModel) => (
         <PostCard key={post.Id} post={post} />
       ))}

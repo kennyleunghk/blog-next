@@ -1,4 +1,4 @@
-import axios, { AxiosResponse, AxiosResponseHeaders } from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { BACKEND } from '../config';
 
 interface AxiosResult extends AxiosResponse {
@@ -35,19 +35,26 @@ export const useHttp: (method: string, path: string, payload: any) => any =
                 const result = await axios.post(path, payload.body, {
                   headers: payload.header,
                 });
-                return await result.data;
+                if (result.statusText === 'OK') {
+                  return result;
+                }
               }
               case 'put': {
-                const result = axios.put(path, payload.body, {
+                const result = await axios.put(path, payload.body, {
                   headers: payload.headers,
                 });
-                return result;
+                if (result.statusText === 'OK') {
+                  return result;
+                }
               }
               case 'patch': {
-                const result = axios.patch(path, payload.body, {
-                  headers: payload.header,
+                console.log(payload);
+                const result = await axios.patch(path, payload.body, {
+                  headers: payload.headers,
                 });
-                return result;
+                if (result.statusText === 'OK') {
+                  return result;
+                }
               }
               case 'delete': {
                 const result = axios.delete(path, payload.body);
@@ -74,7 +81,7 @@ export const useImageUpload = async (image: File) => {
       const result: AxiosResult = await axios.post(
         `${BACKEND}/upload/image_upload`,
         tempForm,
-        { headers },
+        { headers }
       );
       if (result.statusText === 'OK' && result.data.success) {
         return result.data;

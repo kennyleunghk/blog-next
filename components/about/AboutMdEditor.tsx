@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHttp } from '../../hooks/useHttp';
 import { messageActions } from '../../store/slices/message-slice';
@@ -10,22 +10,23 @@ import SendIcon from '@mui/icons-material/Send';
 import '@uiw/react-md-editor/markdown-editor.css';
 import '@uiw/react-markdown-preview/markdown.css';
 interface props {
-  markdownData: string;
+  tempMarkdownData: string;
+  setAbout: (e) => void;
 }
 
-const MDEditor: any = dynamic(
+const MDEditor = dynamic(
   () => import('@uiw/react-md-editor').then((mod) => mod.default),
   { ssr: false }
 );
 
-const AboutMdEditor: FC<props> = ({ markdownData }) => {
+const AboutMdEditor: FC<props> = ({ tempMarkdownData, setAbout }) => {
   const dispatch = useDispatch();
 
   const sendToServer = async () => {
     const token = localStorage.getItem('token');
     const option = {
       headers: { Authorization: token },
-      body: { Describes: markdownData },
+      body: { Describes: tempMarkdownData },
     };
     try {
       const result = await useHttp('patch', '', option);
@@ -44,20 +45,15 @@ const AboutMdEditor: FC<props> = ({ markdownData }) => {
     }
   };
 
-  const updateMarkdownData = (e: string) => {
-    dispatch(aboutActions.setMarkdownData(e));
-  };
-
-  const MDProps = {
-    value: markdownData,
-    height: '600',
-    onChange: updateMarkdownData,
+  const MDProps: any = {
+    value: tempMarkdownData,
+    onChange: (e) => setAbout(e),
   };
 
   return (
-    <Box sx={{ marginBottom: 10 }}>
+    <Box sx={{ marginBottom: 0.5 }}>
       <Box>
-        <MDEditor {...MDProps} />
+        <MDEditor {...MDProps} height='385' visiableDragbar={false} />
       </Box>
       <Box
         sx={{

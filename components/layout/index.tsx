@@ -35,19 +35,20 @@ const Layout: FC = ({ children }) => {
   return (
     <Box minHeight='100vh' bgcolor='#F0F0F0'>
       <Header />
-      <Container component='div' maxWidth='lg' sx={{ paddingBottom: 10 }}>
+      <Container component='div' maxWidth='lg' sx={{ paddingBottom: 8 }}>
         <Box
           sx={{
             minHeight: 30,
             maxHeight: 48,
             marginTop: '0.5rem',
             alignItems: 'center',
-          }}>
+          }}
+        >
           {message.type !== null && (
             <Alert {...alertType}>{message.msg.substring(0, 100)}</Alert>
           )}
         </Box>
-        <Paper sx={{ minHeight: 700, marginTop: 1, padding: '1rem 1rem' }}>
+        <Paper sx={{ minHeight: 600, marginTop: 1, padding: '1rem 1rem' }}>
           {children}
         </Paper>
       </Container>

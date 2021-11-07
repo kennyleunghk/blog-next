@@ -32,7 +32,8 @@ export const PostCard: FC<AppProps> = ({ post }) => {
         fontStyle: 'italic',
       }}
       component='div'
-      align='center'>
+      align='center'
+    >
       {post.Title}
     </Typography>
   );
@@ -42,8 +43,8 @@ export const PostCard: FC<AppProps> = ({ post }) => {
   };
 
   return (
-    <Grid item xs={12} sm={12} md={12} lg={6}>
-      <Card className={classes['post-card']} sx={{ width: 400 }}>
+    <Grid item margin='1rem'>
+      <Card sx={{ width: 500 }}>
         <CardHeader title={CardHeaderTitle} className={classes['post-title']} />
         <CardMedia
           component='img'
@@ -52,9 +53,6 @@ export const PostCard: FC<AppProps> = ({ post }) => {
           alt={post.CoverImg}
           onClick={() => routeHandler(`Post/${post.Id}`)}
         />
-        <Link href={`/Post/${post.Id}`}>
-          <div className={classes['post-title']}></div>
-        </Link>
 
         <CardContent>
           <Box>
@@ -63,7 +61,8 @@ export const PostCard: FC<AppProps> = ({ post }) => {
               sx={{
                 fontStyle: 'italic',
                 fontSize: '0.8rem',
-              }}>
+              }}
+            >
               {post.Description}
             </Typography>
           </Box>
@@ -74,7 +73,8 @@ export const PostCard: FC<AppProps> = ({ post }) => {
               rowGap: 1,
               gridTemplateColumns: 'repeat(2, 1fr)',
               marginTop: '1rem',
-            }}>
+            }}
+          >
             <Typography variant='body2' align='left' fontSize='0.8rem'>
               Kenny Leung
             </Typography>
