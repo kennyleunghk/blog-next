@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 // import Link from '@mui/material/Link';
@@ -12,10 +12,19 @@ import Button from '@mui/material/Button';
 import SearchField from './SearchField';
 import IconsBar from './IconsBar';
 import { rootState } from '../../store';
+import { postActions } from '../../store/slices/post-slice';
 
 const HeaderBar: FC = () => {
+  const dispatch = useDispatch();
   const isLiggedIn = useSelector((state: rootState) => state.auth.isLoggedIn);
+  const edit = useSelector((state: rootState) => state.post.edit);
   const router = useRouter();
+  const newPostHandler = async () => {
+    if (edit === true) {
+      await dispatch(postActions.setEdit());
+    }
+    await router.push('/NewPost');
+  };
   return (
     <>
       <AppBar position='static' color='secondary' style={{ boxShadow: 'none' }}>
@@ -27,7 +36,7 @@ const HeaderBar: FC = () => {
               sx={{
                 marginRight: 2,
               }}
-              onClick={() => router.push('NewPost')}
+              onClick={newPostHandler}
             >
               New
             </Button>

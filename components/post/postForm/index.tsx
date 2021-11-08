@@ -17,6 +17,7 @@ import {
   Select,
   TextField,
   TextFieldProps,
+  Stack,
 } from '@mui/material';
 import ImagePreview from '../../images/ImagePreview';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
@@ -33,6 +34,7 @@ import { NewPostModel } from '../../../models/NewPostModel';
 import '@uiw/react-md-editor/markdown-editor.css';
 import '@uiw/react-markdown-preview/markdown.css';
 import { PostModel } from '../../../models/PostModel';
+import { postActions } from '../../../store/slices/post-slice';
 
 const MDEditor: any = dynamic(
   () => import('@uiw/react-md-editor').then((mod) => mod.default),
@@ -40,13 +42,13 @@ const MDEditor: any = dynamic(
 );
 
 interface PostFormProps {
-  edit: boolean;
   post: PostModel;
 }
 
-const PostForm: FC<PostFormProps> = ({ edit, post }) => {
+const PostForm: FC<PostFormProps> = ({ post }) => {
   const router = useRouter();
-  const [postFormData, setpostFormData] = useState<NewPostModel>({
+  const edit = useSelector((state: rootState) => state.post.edit);
+  const [postFormData, setPostFormData] = useState<NewPostModel>({
     Title: '',
     CoverImg: '',
     Description: '',
@@ -57,9 +59,8 @@ const PostForm: FC<PostFormProps> = ({ edit, post }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log(post);
     if (edit) {
-      setpostFormData({
+      setPostFormData({
         Title: post.Title,
         CoverImg: post.CoverImg,
         Description: post.Description,
@@ -76,31 +77,31 @@ const PostForm: FC<PostFormProps> = ({ edit, post }) => {
   const formUpdateHandler = (e, value: string) => {
     switch (value.trim().toLowerCase()) {
       case 'title':
-        setpostFormData({
+        setPostFormData({
           ...postFormData,
           Title: e.target.value,
         });
         break;
       case 'description':
-        setpostFormData({
+        setPostFormData({
           ...postFormData,
           Description: e.target.value,
         });
         break;
       case 'tags':
-        setpostFormData({
+        setPostFormData({
           ...postFormData,
           Tags: e.target.value,
         });
         break;
       case 'category':
-        setpostFormData({
+        setPostFormData({
           ...postFormData,
           Category: parseInt(e.target.value),
         });
         break;
       default:
-        setpostFormData({
+        setPostFormData({
           ...postFormData,
         });
     }
@@ -110,7 +111,7 @@ const PostForm: FC<PostFormProps> = ({ edit, post }) => {
     const result = await useImageUpload(e.target.files[0]);
     if (result.success) {
       await dispatch(messageActions.setSuccess(result.success));
-      await setpostFormData({
+      await setPostFormData({
         ...postFormData,
         CoverImg: result.image,
       });
@@ -122,6 +123,7 @@ const PostForm: FC<PostFormProps> = ({ edit, post }) => {
   const categories: Array<CategoryModel> = useSelector(
     (state: rootState) => state.post.categories
   );
+
   const submitHandler: FormEventHandler = async (e: FormEvent<HTMLElement>) => {
     e.preventDefault();
     const data = {
@@ -134,12 +136,26 @@ const PostForm: FC<PostFormProps> = ({ edit, post }) => {
         Contents: markdownData,
       },
     };
-    const created: any = await useHttp('put', `${BACKEND}/Post/create`, data);
-    if (created) {
-      await dispatch(messageActions.setSuccess(created.data.msg));
-      setTimeout(() => {
-        router.push(`/Post/${created.data.insertId}`);
-      }, 1000);
+    switch (edit) {
+      case true: {
+      }
+      case false: {
+        try {
+          const created: any = await useHttp(
+            'put',
+            `${BACKEND}/Post/create`,
+            data
+          );
+          if (created) {
+            await dispatch(messageActions.setSuccess(created.data.msg));
+            setTimeout(() => {
+              router.push(`/Post/${created.data.insertId}`);
+            }, 1000);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
     }
   };
 
@@ -159,7 +175,7 @@ const PostForm: FC<PostFormProps> = ({ edit, post }) => {
         <ImagePreview
           path={postFormData.CoverImg}
           onClosed={() =>
-            setpostFormData({
+            setPostFormData({
               ...postFormData,
               CoverImg: '',
             })
@@ -243,27 +259,37 @@ const PostForm: FC<PostFormProps> = ({ edit, post }) => {
         height='450'
         style={{ margin: '0.8rem 0' }}
       />
-      {edit ? (
-        <Button
-          variant='contained'
-          type='submit'
-          size='small'
-          color='secondary'
-          sx={{ margin: '0.8rem 0' }}
-        >
-          Update
-        </Button>
-      ) : (
-        <Button
-          variant='contained'
-          type='submit'
-          size='small'
-          color='secondary'
-          sx={{ margin: '0.8rem 0' }}
-        >
-          Submit
-        </Button>
-      )}
+      <Stack spacing={1} direction='row'>
+        {edit ? (
+          <>
+            <Button
+              variant='contained'
+              type='submit'
+              size='small'
+              color='secondary'
+            >
+              Update
+            </Button>
+            <Button
+              variant='contained'
+              size='small'
+              color='inherit'
+              onClick={() => dispatch(postActions.setEdit())}
+            >
+              Cancel
+            </Button>
+          </>
+        ) : (
+          <Button
+            variant='contained'
+            type='submit'
+            size='small'
+            color='secondary'
+          >
+            Submit
+          </Button>
+        )}
+      </Stack>
     </Box>
   );
 };

@@ -8,13 +8,15 @@ import { PostModel } from '../../models/PostModel';
 import Comment from '../../components/post/comment';
 import { Box } from '@mui/material';
 import PostEdit from '../../components/post/PostEdit';
+import { rootState } from '../../store';
+import { useSelector } from 'react-redux';
 
 const index: NextPage<PostModel> = ({ post }: any) => {
-  const [edit, setEdit] = useState<any>(false);
-  console.log(edit);
+  const isLoggedIn = useSelector((state: rootState) => state.auth.isLoggedIn);
+  const edit = useSelector((state: rootState) => state.post.edit);
   return (
     <Box>
-      {edit ? (
+      {edit && isLoggedIn ? (
         <PostEdit post={post} edit={edit} />
       ) : (
         <>

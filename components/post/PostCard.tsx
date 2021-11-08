@@ -11,6 +11,7 @@ import Link from 'next/link';
 
 import classes from '../../styles/post/Posts.module.css';
 import { PostModel } from '../../models/PostModel';
+import { STATIC_FOLDER } from '../../config';
 
 interface AppProps {
   post: PostModel;
@@ -49,7 +50,7 @@ export const PostCard: FC<AppProps> = ({ post }) => {
         <CardMedia
           component='img'
           className={classes['post-image']}
-          image={`http://kennyleung-blog.sytes.net:9321/Static/Images/${post.CoverImg}`}
+          image={`${STATIC_FOLDER}${post.CoverImg}`}
           alt={post.CoverImg}
           onClick={() => routeHandler(`Post/${post.Id}`)}
         />

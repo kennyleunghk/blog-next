@@ -3,15 +3,17 @@ import { CategoryModel } from '../../models/CategoryModel';
 import { PostModel } from '../../models/PostModel';
 
 class InitialState {
-  posts: PostModel[] | undefined;
-  showPosts: PostModel[] | undefined;
-  categories: CategoryModel[] | undefined;
+  posts?: PostModel[];
+  showPosts?: PostModel[];
+  categories?: CategoryModel[];
+  edit: boolean;
 }
 
 const initialState = {
   posts: [],
   showPosts: [],
   categories: [],
+  edit: false,
 } as InitialState;
 
 const postSlice = createSlice({
@@ -53,6 +55,9 @@ const postSlice = createSlice({
     },
     setCategories: (state, action: PayloadAction<CategoryModel[]>) => {
       state.categories = action.payload;
+    },
+    setEdit: (state) => {
+      state.edit = !state.edit;
     },
   },
 });

@@ -9,12 +9,13 @@ import {
   ButtonGroup,
 } from '@mui/material';
 import { PostModel } from '../../models/PostModel';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { rootState } from '../../store';
 
 import '@uiw/react-md-editor/markdown-editor.css';
 import '@uiw/react-markdown-preview/markdown.css';
 import dynamic from 'next/dynamic';
+import { postActions } from '../../store/slices/post-slice';
 
 const Markdown: any = dynamic(
   (): any => import('@uiw/react-md-editor').then((mod) => mod.default.Markdown),
@@ -27,6 +28,7 @@ interface AppProps {
 
 const PostDetail: FC<AppProps> = ({ post }) => {
   const isLoggedIn = useSelector((state: rootState) => state.auth.isLoggedIn);
+  const dispatch = useDispatch();
   return (
     <Grid container spacing={3}>
       <Grid item xs={12}>
@@ -41,7 +43,12 @@ const PostDetail: FC<AppProps> = ({ post }) => {
             size='small'
             aria-label='small button group'
           >
-            <Button color='info'>Edit</Button>
+            <Button
+              color='info'
+              onClick={() => dispatch(postActions.setEdit())}
+            >
+              Edit
+            </Button>
             <Button color='secondary'>Disable</Button>
           </ButtonGroup>
         </Grid>
