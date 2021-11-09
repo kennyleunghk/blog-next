@@ -33,7 +33,7 @@ const Layout: FC = ({ children }) => {
   }, [message]);
 
   return (
-    <Box minHeight='100vh' bgcolor='#F0F0F0'>
+    <Box minHeight='100vh' bgcolor='#F5F5F5'>
       <Header />
       <Container component='div' maxWidth='lg' sx={{ paddingBottom: 8 }}>
         <Box

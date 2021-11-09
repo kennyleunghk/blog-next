@@ -137,8 +137,27 @@ const PostForm: FC<PostFormProps> = ({ post }) => {
       },
     };
     switch (edit) {
-      case true: {
-      }
+      case true:
+        try {
+          const updated: any = await useHttp(
+            'patch',
+            `${BACKEND}/Post/updatePost`,
+            {
+              ...data,
+              body: {
+                ...data.body,
+                Id: post.Id,
+              },
+            }
+          );
+          if (updated) {
+            await dispatch(messageActions.setSuccess(updated.data.msg));
+            dispatch(postActions.setEdit());
+          }
+        } catch (error) {
+          console.log(error);
+        }
+        break;
       case false: {
         try {
           const created: any = await useHttp(
@@ -150,11 +169,12 @@ const PostForm: FC<PostFormProps> = ({ post }) => {
             await dispatch(messageActions.setSuccess(created.data.msg));
             setTimeout(() => {
               router.push(`/Post/${created.data.insertId}`);
-            }, 1000);
+            }, 500);
           }
         } catch (error) {
           console.log(error);
         }
+        break;
       }
     }
   };

@@ -61,9 +61,13 @@ const Profile: FC<AppProps> = ({ path, updatePicture }: AppProps) => {
           data
         );
         if (updated) {
-          console.log(updated);
           await updatePicture(tempProfilePicture);
           await clearPicture();
+          await dispatch(
+            messageActions.setSuccess(
+              'Profile picture has been updated successful'
+            )
+          );
         }
       } catch (error) {
         dispatch(messageActions.setError(error.message));

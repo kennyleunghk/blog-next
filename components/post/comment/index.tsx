@@ -1,17 +1,21 @@
+import { Box } from '@mui/system';
 import React, { FC } from 'react';
+import CommentList from './CommentList';
+import NewComment from './NewComment';
 
 const Comment: FC = () => {
   return (
-    <div
-      style={{
-        backgroundColor: 'black',
-        color: 'white',
-        width: '100%',
-        marginTop: '1rem',
+    <Box
+      sx={{
+        bgcolor: '#F5F5F5',
+        borderRadius: '5px',
+        padding: '.5rem 1rem',
+        marginTop: '2rem',
       }}
     >
-      new comment
-    </div>
+      <NewComment />
+      <CommentList />
+    </Box>
   );
 };
 

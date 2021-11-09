@@ -9,6 +9,7 @@ import SendIcon from '@mui/icons-material/Send';
 
 import '@uiw/react-md-editor/markdown-editor.css';
 import '@uiw/react-markdown-preview/markdown.css';
+import { BACKEND } from '../../config';
 interface props {
   tempMarkdownData: string;
   setAbout: (e) => void;
@@ -25,13 +26,14 @@ const AboutMdEditor: FC<props> = ({ tempMarkdownData, setAbout }) => {
   const sendToServer = async () => {
     const token = localStorage.getItem('token');
     const option = {
-      headers: { Authorization: token },
+      headers: { Authorization: 'Bearer ' + token },
       body: { Describes: tempMarkdownData },
     };
     try {
-      const result = await useHttp('patch', '', option);
-      if (result) {
-        dispatch(messageActions.setSuccess(result.msg));
+      const result = await useHttp('patch', `${BACKEND}/About/update`, option);
+      if (result.statusText === 'OK') {
+        console.log(result.data);
+        dispatch(messageActions.setSuccess(result.data.msg));
       }
     } catch (error) {
       console.log(error);
