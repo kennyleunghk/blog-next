@@ -3,18 +3,18 @@ import React, { FC } from 'react';
 import CommentList from './CommentList';
 import NewComment from './NewComment';
 
-const Comment: FC = () => {
+const Comment = ({ comments }) => {
   return (
     <Box
       sx={{
         bgcolor: '#F5F5F5',
         borderRadius: '5px',
-        padding: '.5rem 1rem',
+        padding: '0.5rem 0.5rem',
         marginTop: '2rem',
       }}
     >
       <NewComment />
-      <CommentList />
+      <CommentList comments={comments} />
     </Box>
   );
 };

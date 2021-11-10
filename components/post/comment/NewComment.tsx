@@ -9,6 +9,7 @@ import {
   FormControl,
   FormHelperText,
   Grid,
+  GridProps,
   Input,
   InputLabel,
   TextField,
@@ -52,36 +53,57 @@ const NewComment: FC = () => {
   const textFieldProps: TextFieldProps = {
     size: 'small',
     color: 'secondary',
-    sx: { margin: '0.4rem 0' },
     fullWidth: true,
+  };
+
+  const formControlProps: GridProps = {
+    sx: { padding: '0.5rem 0.5rem' },
+    xs: 12,
+    item: true,
   };
 
   return (
     <Grid component='form' onSubmit={submitComment}>
-      <TextField
-        {...textFieldProps}
-        id='outlined-basic'
-        label='Name *'
-        placeholder='required'
-        color='info'
-      />
-      <TextField
-        {...textFieldProps}
-        id='email'
-        label='Email'
-        placeholder='optional'
-      />
-      <TextField
-        {...textFieldProps}
-        id='textArea'
-        label='Comment'
-        placeholder='Tell me what you think'
-        multiline
-        minRows={3}
-      />
-      <Button variant='contained' size='small' color='secondary' type='submit'>
-        Post
-      </Button>
+      <Grid container spacing={0} bgcolor='white' borderRadius='5px'>
+        <Grid md={6} lg={6} {...formControlProps}>
+          <TextField
+            {...textFieldProps}
+            id='outlined-basic'
+            label='Name *'
+            placeholder='required'
+            color='info'
+          />
+        </Grid>
+
+        <Grid md={6} lg={6} {...formControlProps}>
+          <TextField
+            {...textFieldProps}
+            id='email'
+            label='Email'
+            placeholder='optional'
+          />
+        </Grid>
+        <Grid {...formControlProps} md={12} lg={12}>
+          <TextField
+            {...textFieldProps}
+            id='textArea'
+            label='Comment'
+            placeholder='Tell me what you think'
+            multiline
+            minRows={3}
+          />
+        </Grid>
+        <Grid {...formControlProps} md={12} lg={12}>
+          <Button
+            variant='contained'
+            size='small'
+            color='secondary'
+            type='submit'
+          >
+            Post
+          </Button>
+        </Grid>
+      </Grid>
     </Grid>
   );
 };

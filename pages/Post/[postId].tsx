@@ -21,7 +21,7 @@ const index: NextPage<PostModel> = ({ post }: any) => {
       ) : (
         <>
           <PostDetail post={post} />
-          <Comment />
+          <Comment comments={post.Comments} />
         </>
       )}
     </Box>
