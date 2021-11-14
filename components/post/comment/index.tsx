@@ -3,7 +3,7 @@ import React, { FC } from 'react';
 import CommentList from './CommentList';
 import NewComment from './NewComment';
 
-const Comment = ({ comments }) => {
+const Comment: FC = ({ comments, updateComment }: any) => {
   return (
     <Box
       sx={{
@@ -13,7 +13,7 @@ const Comment = ({ comments }) => {
         marginTop: '2rem',
       }}
     >
-      <NewComment />
+      <NewComment updateComment={updateComment} />
       <CommentList comments={comments} />
     </Box>
   );

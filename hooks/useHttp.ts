@@ -40,6 +40,7 @@ export const useHttp: (method: string, path: string, payload: any) => any =
                 }
               }
               case 'put': {
+                console.log('useHttp put');
                 const result = await axios.put(path, payload.body, {
                   headers: payload.headers,
                 });

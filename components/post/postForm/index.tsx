@@ -29,7 +29,7 @@ import { useHttp, useImageUpload } from '../../../hooks/useHttp';
 import { messageActions } from '../../../store/slices/message-slice';
 import { BACKEND } from '../../../config';
 import { rootState } from '../../../store';
-import { NewPostModel } from '../../../models/NewPostModel';
+import usePostForm from '../../../hooks/usePostForm';
 
 import '@uiw/react-md-editor/markdown-editor.css';
 import '@uiw/react-markdown-preview/markdown.css';
@@ -48,14 +48,15 @@ interface PostFormProps {
 const PostForm: FC<PostFormProps> = ({ post }) => {
   const router = useRouter();
   const edit = useSelector((state: rootState) => state.post.edit);
-  const [postFormData, setPostFormData] = useState<NewPostModel>({
-    Title: '',
-    CoverImg: '',
-    Description: '',
-    Tags: '',
-    Category: 0,
-  });
-  const [markdownData, setMarkdownData] = useState('');
+  const [
+    postFormData,
+    markdownData,
+    postValidator,
+    setPostFormData,
+    setMarkdownData,
+    formUpdateHandler,
+    focusHandler,
+  ] = usePostForm();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -69,43 +70,10 @@ const PostForm: FC<PostFormProps> = ({ post }) => {
       });
       setMarkdownData(post.Contents);
     }
-  }, []);
+  }, [edit]);
   useEffect(() => {
     console.log(postFormData);
   }, [postFormData]);
-
-  const formUpdateHandler = (e, value: string) => {
-    switch (value.trim().toLowerCase()) {
-      case 'title':
-        setPostFormData({
-          ...postFormData,
-          Title: e.target.value,
-        });
-        break;
-      case 'description':
-        setPostFormData({
-          ...postFormData,
-          Description: e.target.value,
-        });
-        break;
-      case 'tags':
-        setPostFormData({
-          ...postFormData,
-          Tags: e.target.value,
-        });
-        break;
-      case 'category':
-        setPostFormData({
-          ...postFormData,
-          Category: parseInt(e.target.value),
-        });
-        break;
-      default:
-        setPostFormData({
-          ...postFormData,
-        });
-    }
-  };
 
   const imageUploadHandler = async (e: ChangeEvent<HTMLInputElement>) => {
     const result = await useImageUpload(e.target.files[0]);
@@ -136,46 +104,52 @@ const PostForm: FC<PostFormProps> = ({ post }) => {
         Contents: markdownData,
       },
     };
-    switch (edit) {
-      case true:
-        try {
-          const updated: any = await useHttp(
-            'patch',
-            `${BACKEND}/Post/updatePost`,
-            {
-              ...data,
-              body: {
-                ...data.body,
-                Id: post.Id,
-              },
-            }
-          );
-          if (updated) {
-            await dispatch(messageActions.setSuccess(updated.data.msg));
-            dispatch(postActions.setEdit());
-          }
-        } catch (error) {
-          console.log(error);
-        }
-        break;
-      case false: {
-        try {
-          const created: any = await useHttp(
-            'put',
-            `${BACKEND}/Post/create`,
-            data
-          );
-          if (created) {
-            await dispatch(messageActions.setSuccess(created.data.msg));
-            setTimeout(() => {
-              router.push(`/Post/${created.data.insertId}`);
-            }, 500);
-          }
-        } catch (error) {
-          console.log(error);
-        }
-        break;
-      }
+
+    if (postValidator.submittable) {
+      console.log('submittable');
+      // switch (edit) {
+      //   case true:
+      //     try {
+      //       const updated: any = await useHttp(
+      //         'patch',
+      //         `${BACKEND}/Post/updatePost`,
+      //         {
+      //           ...data,
+      //           body: {
+      //             ...data.body,
+      //             Id: post.Id,
+      //           },
+      //         }
+      //       );
+      //       if (updated) {
+      //         await dispatch(messageActions.setSuccess(updated.data.msg));
+      //         dispatch(postActions.setEdit());
+      //       }
+      //     } catch (error) {
+      //       console.log(error);
+      //     }
+      //     break;
+      //   case false: {
+      //     try {
+      //       const created: any = await useHttp(
+      //         'put',
+      //         `${BACKEND}/Post/create`,
+      //         data
+      //       );
+      //       if (created) {
+      //         await dispatch(messageActions.setSuccess(created.data.msg));
+      //         setTimeout(() => {
+      //           router.push(`/Post/${created.data.insertId}`);
+      //         }, 500);
+      //       }
+      //     } catch (error) {
+      //       console.log(error);
+      //     }
+      //     break;
+      //   }
+      // }
+    } else {
+      console.log('unsubmittable');
     }
   };
 
@@ -204,7 +178,7 @@ const PostForm: FC<PostFormProps> = ({ post }) => {
       ) : (
         <label htmlFor='contained-button-file'>
           <Input
-            id='contained-button-file'
+            id='image'
             type='file'
             sx={{ display: 'none' }}
             onChange={imageUploadHandler}
@@ -224,9 +198,9 @@ const PostForm: FC<PostFormProps> = ({ post }) => {
         id='title'
         label='Title *'
         value={postFormData.Title}
-        onChange={(e: ChangeEvent<HTMLInputElement>) =>
-          formUpdateHandler(e, 'title')
-        }
+        onChange={formUpdateHandler}
+        error={postValidator.error.title}
+        onFocus={focusHandler}
         fullWidth
       />
       <TextField
@@ -234,9 +208,9 @@ const PostForm: FC<PostFormProps> = ({ post }) => {
         id='description'
         label='Description *'
         value={postFormData.Description}
-        onChange={(e: ChangeEvent<HTMLInputElement>) =>
-          formUpdateHandler(e, 'description')
-        }
+        error={postValidator.error.description}
+        onChange={formUpdateHandler}
+        onFocus={focusHandler}
         fullWidth
       />
       <TextField
@@ -245,9 +219,7 @@ const PostForm: FC<PostFormProps> = ({ post }) => {
         label='Tags'
         value={postFormData.Tags}
         sx={{ width: '50%', paddingRight: 1, margin: '0.8rem 0' }}
-        onChange={(e: ChangeEvent<HTMLInputElement>) =>
-          formUpdateHandler(e, 'tags')
-        }
+        onChange={formUpdateHandler}
       />
       <FormControl
         size='small'
@@ -258,12 +230,12 @@ const PostForm: FC<PostFormProps> = ({ post }) => {
         </InputLabel>
         <Select
           labelId='demo-simple-select-label'
-          id='demo-simple-select'
+          id='category'
           value={postFormData.Category}
+          error={postValidator.error.category}
           label='Category *'
-          onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            formUpdateHandler(e, 'category')
-          }
+          onChange={formUpdateHandler}
+          onFocus={focusHandler}
           required
         >
           {categories.map((cate: CategoryModel) => (
@@ -276,7 +248,8 @@ const PostForm: FC<PostFormProps> = ({ post }) => {
       <MDEditor
         value={markdownData}
         onChange={setMarkdownData}
-        height='450'
+        height='360'
+        onFocus={focusHandler}
         style={{ margin: '0.8rem 0' }}
       />
       <Stack spacing={1} direction='row'>

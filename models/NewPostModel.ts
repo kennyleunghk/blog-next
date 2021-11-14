@@ -1,4 +1,4 @@
-export interface NewPostModel {
+interface NewPostModel {
   Title?: string;
   CoverImg?: string;
   Description?: string;

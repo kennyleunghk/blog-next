@@ -1,5 +1,6 @@
 // SSG teamplate
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import Head from 'next/head';
 import { NextPage } from 'next';
 import PostDetail from '../../components/post/PostDetail';
 import { useHttp } from '../../hooks/useHttp';
@@ -14,17 +15,35 @@ import { useSelector } from 'react-redux';
 const index: NextPage<PostModel> = ({ post }: any) => {
   const isLoggedIn = useSelector((state: rootState) => state.auth.isLoggedIn);
   const edit = useSelector((state: rootState) => state.post.edit);
+  const [postState, setPostState] = useState(post);
+  const updateComment = (comment) => {
+    setPostState({ ...post, Comments: [...post.Comments, comment] });
+  };
+  const CommentProps: any = {
+    comments: postState.Comments,
+    updateComment: updateComment,
+  };
+  useEffect(() => {
+    console.log(postState.Comments);
+  }, [postState.Comments]);
+
   return (
-    <Box>
-      {edit && isLoggedIn ? (
-        <PostEdit post={post} edit={edit} />
-      ) : (
-        <>
-          <PostDetail post={post} />
-          <Comment comments={post.Comments} />
-        </>
-      )}
-    </Box>
+    <>
+      <Head>
+        <title>{post.Title}</title>
+        <meta name='Description' content={post.Description} />
+      </Head>
+      <Box>
+        {edit && isLoggedIn ? (
+          <PostEdit post={post} edit={edit} />
+        ) : (
+          <>
+            <PostDetail post={post} />
+            <Comment {...CommentProps} />
+          </>
+        )}
+      </Box>
+    </>
   );
 };
 

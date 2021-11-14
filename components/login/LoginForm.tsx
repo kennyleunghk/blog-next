@@ -16,7 +16,7 @@ import { rootState } from '../../store';
 import { BACKEND } from '../../config';
 
 import Box from '@mui/material/Box';
-import { Divider, TextField, Button } from '@mui/material';
+import { Divider, TextField, Button, TextFieldProps } from '@mui/material';
 
 import { authActions } from '../../store/slices/auth-slice';
 
@@ -24,6 +24,13 @@ interface LoginFormData {
   UserId: string;
   Password: string;
 }
+
+const InputProps: TextFieldProps = {
+  margin: 'normal',
+  fullWidth: true,
+  required: true,
+  size: 'small',
+};
 
 const LoginForm: FC = () => {
   const router = useRouter();
@@ -108,23 +115,19 @@ const LoginForm: FC = () => {
   return (
     <Box component='form' autoComplete='off' onSubmit={submitHandler}>
       <TextField
+        {...InputProps}
         error={invalidId}
-        margin='normal'
-        fullWidth
         label='Login ID'
         value={data.UserId}
         onChange={setId}
-        required
         onFocus={() => {
           !touch && firstInputHandler();
         }}
       />
       <TextField
+        {...InputProps}
         error={invalidPassword}
         variant='outlined'
-        margin='normal'
-        required
-        fullWidth
         label='Password'
         type='password'
         value={data.Password}
@@ -138,6 +141,7 @@ const LoginForm: FC = () => {
         type='submit'
         variant='contained'
         color='primary'
+        size='small'
         sx={{ display: 'block', margin: 'auto', marginTop: 2 }}
         disabled={
           invalidPassword === false && invalidId === false ? false : true

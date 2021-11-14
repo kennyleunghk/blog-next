@@ -1,4 +1,4 @@
-import React, { useState, FC } from 'react';
+import React, { useState, useEffect, FC } from 'react';
 import { useRouter } from 'next/router';
 import { Box } from '@mui/system';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
@@ -6,17 +6,13 @@ import { useHttp } from '../../../hooks/useHttp';
 import { BACKEND } from '../../../config';
 import {
   Button,
-  FormControl,
-  FormHelperText,
   Grid,
   GridProps,
-  Input,
-  InputLabel,
   TextField,
   TextFieldProps,
 } from '@mui/material';
 
-const NewComment: FC = () => {
+const NewComment = ({ updateComment }: any) => {
   const { postId } = useRouter().query;
   const [commentData, setCommentData] = useState({
     PostId: parseInt(postId.toString()),
@@ -24,36 +20,128 @@ const NewComment: FC = () => {
     Email: '',
     Comment: '',
   });
+  const [focus, setFocus] = useState({
+    Name: false,
+    Email: false,
+    Comment: false,
+  });
+  const [error, setError] = useState({
+    Name: false,
+    Email: false,
+    Comment: false,
+  });
+
+  const [submittable, setSubmittable] = useState(false);
+  useEffect(() => {
+    if (
+      error.Name === false &&
+      focus.Name === true &&
+      error.Comment === false &&
+      focus.Comment === true &&
+      error.Email === false
+    ) {
+      setSubmittable(true);
+    } else {
+      setSubmittable(false);
+    }
+  }, [error]);
 
   const submitComment = async (event) => {
     event.preventDefault();
-    console.log('submitted');
-    // try {
-    //   const result = await useHttp('put', `${BACKEND}/Comment`, {
-    //     Comment: commentData,
-    //   });
-    //   if (result.statusText === 'OK') {
-    //     addComment({
-    //       ...formData,
-    //       Id: result.data.CommentId,
-    //       CreatedTime: moment(Date.now()).format('YYYY-MM-DDTHH:mm:ss.SSS'),
-    //     });
-    //     setFormData({
-    //       ...formData,
-    //       Name: '',
-    //       Email: '',
-    //       Comment: '',
-    //     });
-    //   }
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    try {
+      if (submittable) {
+        const result = await useHttp('put', `${BACKEND}/Comment/add`, {
+          body: { Comment: commentData },
+          headers: {},
+        });
+        if (result.statusText === 'OK') {
+          updateComment({ ...commentData, Id: 'temp' });
+        }
+      } else {
+        alert('form not completed');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (focus.Name === true && commentData.Name.length === 0) {
+      setError({ ...error, Name: true });
+    } else {
+      setError({ ...error, Name: false });
+    }
+  }, [commentData.Name, focus.Name]);
+
+  useEffect(() => {
+    if (
+      focus.Email === true &&
+      commentData.Email !== '' &&
+      !commentData.Email.includes('@')
+    ) {
+      setError({ ...error, Email: true });
+    } else {
+      setError({ ...error, Email: false });
+    }
+  }, [commentData.Email, focus.Email]);
+
+  useEffect(() => {
+    if (focus.Comment === true && commentData.Comment === '') {
+      setError({ ...error, Comment: true });
+    } else {
+      setError({ ...error, Comment: false });
+    }
+  }, [commentData.Comment, focus.Comment]);
+
+  const commentHandler = async (e) => {
+    switch (e.target.id) {
+      case 'name': {
+        await setCommentData({
+          ...commentData,
+          Name: e.target.value,
+        });
+        break;
+      }
+      case 'email': {
+        await setCommentData({
+          ...commentData,
+          Email: e.target.value,
+        });
+        break;
+      }
+      case 'textArea': {
+        setCommentData({
+          ...commentData,
+          Comment: e.target.value,
+        });
+        break;
+      }
+    }
+  };
+
+  const focusHandler = (e) => {
+    switch (e.target.id) {
+      case 'name': {
+        setFocus({ ...focus, Name: true });
+        break;
+      }
+      case 'email': {
+        setFocus({ ...focus, Email: true });
+        break;
+      }
+      case 'textArea': {
+        setFocus({ ...focus, Comment: true });
+        break;
+      }
+    }
   };
 
   const textFieldProps: TextFieldProps = {
     size: 'small',
     color: 'secondary',
     fullWidth: true,
+    onChange: commentHandler,
+    onFocus: focusHandler,
   };
 
   const formControlProps: GridProps = {
@@ -63,15 +151,21 @@ const NewComment: FC = () => {
   };
 
   return (
-    <Grid component='form' onSubmit={submitComment}>
+    <Grid
+      component='form'
+      onSubmit={submitComment}
+      sx={{ marginBottom: '0.5rem' }}
+    >
       <Grid container spacing={0} bgcolor='white' borderRadius='5px'>
         <Grid md={6} lg={6} {...formControlProps}>
           <TextField
             {...textFieldProps}
-            id='outlined-basic'
+            id='name'
             label='Name *'
             placeholder='required'
             color='info'
+            value={commentData.Name}
+            error={error.Name === true && true}
           />
         </Grid>
 
@@ -81,6 +175,8 @@ const NewComment: FC = () => {
             id='email'
             label='Email'
             placeholder='optional'
+            value={commentData.Email}
+            error={error.Email}
           />
         </Grid>
         <Grid {...formControlProps} md={12} lg={12}>
@@ -88,9 +184,12 @@ const NewComment: FC = () => {
             {...textFieldProps}
             id='textArea'
             label='Comment'
-            placeholder='Tell me what you think'
+            placeholder='Tell me what you think (At least 20 words)'
             multiline
             minRows={3}
+            value={commentData.Comment}
+            onChange={commentHandler}
+            error={error.Comment}
           />
         </Grid>
         <Grid {...formControlProps} md={12} lg={12}>
