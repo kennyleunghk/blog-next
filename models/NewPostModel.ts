@@ -5,3 +5,5 @@ interface NewPostModel {
   Tags: string;
   Category: number;
 }
+
+export {};

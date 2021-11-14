@@ -1,3 +1,5 @@
+import { CommentModel } from './CommentModel';
+
 export interface PostModel {
   Category: string | null;
   Comments?: CommentModel[];

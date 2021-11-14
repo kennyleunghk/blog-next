@@ -13,6 +13,7 @@ import ImagePreview from '../../components/images/ImagePreview';
 import { MDEditorProps } from '@uiw/react-md-editor';
 import Profile from '../../components/about/Profile';
 import { Box } from '@mui/system';
+import { AboutModel } from '../../models/AboutModel';
 
 const Markdown: any = dynamic(
   (): any => import('@uiw/react-md-editor').then((mod) => mod.default.Markdown),
