@@ -14,7 +14,7 @@ const Home: NextPage = () => {
           content='Kenny Leung personal blog for sharing IT technologies'
         />
       </Head>
-      <Posts />;
+      <Posts />
     </>
   );
 };
