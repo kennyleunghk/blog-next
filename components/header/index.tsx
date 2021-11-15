@@ -30,7 +30,7 @@ const Header: FC = () => {
       const categories: any = await useHttp(
         'get',
         `${BACKEND}/LoadData/categories`,
-        null,
+        null
       );
       if (categories) {
         dispatch(postActions.setCategories(categories));
@@ -39,7 +39,7 @@ const Header: FC = () => {
       const posts: any = await useHttp(
         'get',
         `${BACKEND}/LoadData/Posts`,
-        null,
+        null
       );
       if (posts) {
         dispatch(postActions.getPost(posts));
@@ -74,7 +74,6 @@ const Header: FC = () => {
   return (
     <Head>
       <HeaderBar />
-      <CategoryBar />
     </Head>
   );
 };

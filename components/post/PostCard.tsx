@@ -44,46 +44,45 @@ export const PostCard: FC<AppProps> = ({ post }) => {
   };
 
   return (
-    <Grid item margin='1rem'>
-      <Card sx={{ width: 500 }}>
-        <CardHeader title={CardHeaderTitle} className={classes['post-title']} />
-        <CardMedia
-          component='img'
-          className={classes['post-image']}
-          image={`${STATIC_FOLDER}${post.CoverImg}`}
-          alt={post.CoverImg}
-          onClick={() => routeHandler(`Post/${post.Id}`)}
-        />
+    <Card sx={{ minWidth: '100%' }}>
+      <CardHeader title={CardHeaderTitle} className={classes['post-title']} />
+      <CardMedia
+        component='img'
+        className={classes['post-image']}
+        image={`${STATIC_FOLDER}${post.CoverImg}`}
+        alt={post.CoverImg}
+        onClick={() => routeHandler(`Post/${post.Id}`)}
+      />
 
-        <CardContent>
-          <Box>
-            <Typography
-              minHeight='3rem'
-              sx={{
-                fontStyle: 'italic',
-                fontSize: '0.8rem',
-              }}
-            >
-              {post.Description}
-            </Typography>
-          </Box>
-          <Box
+      <CardContent>
+        <Box>
+          <Typography
+            minHeight='3rem'
             sx={{
-              display: 'grid',
-              columnGap: 3,
-              rowGap: 1,
-              gridTemplateColumns: 'repeat(2, 1fr)',
-              marginTop: '1rem',
+              fontStyle: 'italic',
+              fontSize: '0.8rem',
             }}
           >
-            <Typography variant='body2' align='left' fontSize='0.8rem'>
-              Kenny Leung
-            </Typography>
-            <Typography variant='body2' align='right' fontSize='0.8rem'>
-              {moment(post.CreatedTime).format('DD MMM, YYYY')}
-            </Typography>
-          </Box>
-          {/* <Row style={{ height: '100%' }}>
+            {post.Description}
+          </Typography>
+        </Box>
+        <Box
+          sx={{
+            display: 'grid',
+            columnGap: 3,
+            rowGap: 1,
+            gridTemplateColumns: 'repeat(2, 1fr)',
+            marginTop: '1rem',
+          }}
+        >
+          <Typography variant='body2' align='left' fontSize='0.8rem'>
+            Kenny Leung
+          </Typography>
+          <Typography variant='body2' align='right' fontSize='0.8rem'>
+            {moment(post.CreatedTime).format('DD MMM, YYYY')}
+          </Typography>
+        </Box>
+        {/* <Row style={{ height: '100%' }}>
             <Col md={5} xs={12} style={{ textAlign: 'center' }}>
               <Link href={`/Post/${post.Id}`}>
                 <Image
@@ -123,9 +122,8 @@ export const PostCard: FC<AppProps> = ({ post }) => {
               </Row>
             </Col>
           </Row> */}
-        </CardContent>
-      </Card>
-    </Grid>
+      </CardContent>
+    </Card>
   );
 };
 

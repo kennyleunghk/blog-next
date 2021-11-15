@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 // import Link from '@mui/material/Link';
+import CategoryBar from './CategoryBar';
 
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -13,6 +14,7 @@ import SearchField from './SearchField';
 import IconsBar from './IconsBar';
 import { rootState } from '../../store';
 import { postActions } from '../../store/slices/post-slice';
+import { Category } from '@mui/icons-material';
 
 const HeaderBar: FC = () => {
   const dispatch = useDispatch();
@@ -27,7 +29,7 @@ const HeaderBar: FC = () => {
   };
   return (
     <>
-      <AppBar position='static' color='secondary' style={{ boxShadow: 'none' }}>
+      <AppBar position='fixed' color='secondary' style={{ boxShadow: 'none' }}>
         <Toolbar>
           {isLiggedIn && (
             <Button
@@ -57,6 +59,7 @@ const HeaderBar: FC = () => {
           <SearchField />
           <IconsBar />
         </Toolbar>
+        <CategoryBar />
       </AppBar>
     </>
   );

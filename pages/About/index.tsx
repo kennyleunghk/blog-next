@@ -14,6 +14,7 @@ import { MDEditorProps } from '@uiw/react-md-editor';
 import Profile from '../../components/about/Profile';
 import { Box } from '@mui/system';
 import { AboutModel } from '../../models/AboutModel';
+import Head from 'next/head';
 
 const Markdown: any = dynamic(
   (): any => import('@uiw/react-md-editor').then((mod) => mod.default.Markdown),
@@ -54,22 +55,29 @@ const index = () => {
   };
 
   return (
-    <Box component='div'>
-      <Profile
-        path={about.Picture}
-        updatePicture={(p) => setAbout({ ...about, Picture: p })}
-      />
-      {isLoggedIn ? (
-        <AboutMdEditor
-          tempMarkdownData={about.tempMarkdownData}
-          setAbout={mdDataHandler}
+    <>
+      <Head>
+        <title>About Me</title>
+        <meta name='Description' content={about.Describes} />
+      </Head>
+
+      <Box component='div'>
+        <Profile
+          path={about.Picture}
+          updatePicture={(p) => setAbout({ ...about, Picture: p })}
         />
-      ) : (
-        <Box sx={{ padding: '1rem 1rem' }}>
-          <Markdown source={about.Describes} />
-        </Box>
-      )}
-    </Box>
+        {isLoggedIn ? (
+          <AboutMdEditor
+            tempMarkdownData={about.tempMarkdownData}
+            setAbout={mdDataHandler}
+          />
+        ) : (
+          <Box sx={{ padding: '1rem 1rem' }}>
+            <Markdown source={about.Describes} />
+          </Box>
+        )}
+      </Box>
+    </>
   );
 };
 

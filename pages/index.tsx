@@ -8,7 +8,7 @@ const Home: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Kenny Leung blog</title>
+        <title>Kenny Leung Blog</title>
         <meta
           name='Description'
           content='Kenny Leung personal blog for sharing IT technologies'

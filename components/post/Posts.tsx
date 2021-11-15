@@ -19,7 +19,9 @@ const Posts = () => {
   return (
     <Grid container justifyContent='center' spacing={2}>
       {showPosts.map((post: PostModel) => (
-        <PostCard key={post.Id} post={post} />
+        <Grid item xs={12} md={6} display='flex' justifyContent='center'>
+          <PostCard key={post.Id} post={post} />
+        </Grid>
       ))}
     </Grid>
   );

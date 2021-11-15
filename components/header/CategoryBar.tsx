@@ -2,7 +2,7 @@ import { MouseEvent, MouseEventHandler, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { AppBar, Toolbar } from '@mui/material';
+import { AppBar, Toolbar, Box, BoxProps } from '@mui/material';
 import { rootState } from '../../store';
 import { CategoryModel } from '../../models/CategoryModel';
 
@@ -21,27 +21,92 @@ const CategoryBar = () => {
     const value = e.currentTarget.innerHTML;
     dispatch(postActions.setShowPost(value));
   };
+
+  // .categories_toolbar {
+  //   display: flex;
+  //   padding: 0rem 0rem;
+  //   position: static;
+  //   min-height: 0;
+  //   font-size: 0.7rem;
+  // }
+
+  // .toolbarLink:hover {
+  //   background-color: #ffc250;
+  //   font-weight: bold;
+  //   text-decoration: none;
+  //   color: #007391;
+  //   cursor: pointer;
+  // }
+  const [hover, setHover] = useState(false);
+
+  const [sx, setSx] = useState<BoxProps>({
+    color: 'white',
+    bgcolor: '#525252',
+    width: '100%',
+    textAlign: 'center',
+    height: 48,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontWeight: 'bold',
+  });
+
+  const categoryBarProps = {
+    sx,
+    onClick: changePostsHandler,
+    onMouseOver: (e) => hoverHander(e),
+    onMouseLeave: (e) => hoverHander(e),
+  };
+
+  const hoverHander = (e) => {
+    e.stopPropagation();
+    switch (e.type) {
+      case 'mouseover': {
+        e.currentTarget.style.backgroundColor = '#ff9800';
+        break;
+      }
+      case 'mouseleave': {
+        e.currentTarget.style.backgroundColor = '#525252';
+        e.currentTarget.style.color = 'white';
+        break;
+      }
+      default:
+        return;
+    }
+  };
+
   return (
     <Toolbar
-      component='nav'
+      disableGutters
       variant='dense'
-      className={classes.categories_toolbar}
+      sx={{
+        display: 'flex',
+        position: 'static',
+        justifyContent: 'space-around',
+        bgcolor: 'white',
+      }}
     >
-      <div
-        className={classes.toolbarLink}
+      <Box
         onClick={changePostsHandler}
         key='all'
+        style={{
+          cursor: 'pointer',
+        }}
+        {...categoryBarProps}
       >
         All
-      </div>
+      </Box>
       {categories.map((section: string | any) => (
-        <div
-          className={classes.toolbarLink}
+        <Box
+          id={section.id}
           key={section.id}
-          onClick={changePostsHandler}
+          {...categoryBarProps}
+          style={{
+            cursor: 'pointer',
+          }}
         >
           {section.name}
-        </div>
+        </Box>
       ))}
     </Toolbar>
   );

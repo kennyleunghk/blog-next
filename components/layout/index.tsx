@@ -35,7 +35,11 @@ const Layout: FC = ({ children }) => {
   return (
     <Box minHeight='100vh' bgcolor='#F5F5F5'>
       <Header />
-      <Container component='div' maxWidth='lg' sx={{ paddingBottom: 8 }}>
+      <Container
+        component='div'
+        maxWidth='lg'
+        sx={{ paddingBottom: 8, marginTop: '12%' }}
+      >
         <Box
           sx={{
             minHeight: 30,
