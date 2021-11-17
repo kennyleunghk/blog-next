@@ -18,7 +18,9 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "pages/Post/[postId].jsx"
+    "pages/Post/[postId].jsx",
+    "hooks/usePosts.tss",
+    "hooks/usePosts.jsx"
   ],
   "exclude": ["node_modules"]
 }

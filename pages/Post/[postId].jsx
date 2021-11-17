@@ -67,7 +67,6 @@ const datas = async () => {
 };
 
 export const getStaticPaths = async () => {
-  console.log(await datas());
   return {
     fallback: false,
     paths: await datas(),

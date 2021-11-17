@@ -1,15 +1,15 @@
 import { CommentModel } from './CommentModel';
 
 export interface PostModel {
-  Category: string | null;
+  Category?: string;
   Comments?: CommentModel[];
-  Contents: string | null;
-  Description: string | null;
-  Id: number | null;
+  Contents?: string;
+  Description?: string;
+  Id?: number;
   CoverImg?: string;
-  LastModified: any;
-  Title: string | null;
-  Tags: string | null;
-  CreatedTime: string;
-  CreatedUser: string | null;
+  LastModified?: any;
+  Title?: string;
+  Tags?: string;
+  CreatedTime?: string;
+  CreatedUser?: string;
 }

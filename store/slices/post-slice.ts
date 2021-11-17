@@ -56,6 +56,9 @@ const postSlice = createSlice({
     setCategories: (state, action: PayloadAction<CategoryModel[]>) => {
       state.categories = action.payload;
     },
+    addPost: (state, action: PayloadAction<PostModel>) => {
+      state.posts = [...state.posts, action.payload];
+    },
     setEdit: (state) => {
       state.edit = !state.edit;
     },

@@ -84,7 +84,7 @@ const Profile: FC<AppProps> = ({ path, updatePicture }: AppProps) => {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'end',
-        marginBottom: '2rem',
+        marginBottom: '0.5rem',
       }}
     >
       <ImagePreview {...ImagePreviewProps} />

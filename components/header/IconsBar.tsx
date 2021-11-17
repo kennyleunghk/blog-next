@@ -24,7 +24,7 @@ const IconsBar = () => {
   };
 
   return (
-    <Stack direction='row' spacing={0}>
+    <Stack direction='row'>
       <IconButton
         size='large'
         aria-label='account of current user'

@@ -11,46 +11,61 @@ const usePostForm = () => {
 
   const [markdownData, setMarkdownData] = useState('');
 
-  const [errorFlag, setErrorFlag] = useState({
-    title: false,
-    image: false,
-    description: false,
-    category: false,
-    content: false,
-  });
-
-  const [focusFlag, setFocusFlag] = useState({
-    title: false,
-    image: false,
-    description: false,
-    category: false,
-    content: false,
-  });
-
   const [submittable, setSubmittable] = useState(false);
 
+  const [error, setError] = useState({
+    title: false,
+    image: false,
+    description: false,
+    category: false,
+    content: false,
+  });
+
+  const [focused, setFocused] = useState({
+    title: false,
+    description: false,
+    category: false,
+    content: false,
+  });
+
   const focusHandler = (e) => {
-    switch (e.target.id) {
-      case 'title': {
-        setFocusFlag({ ...focusFlag, title: true });
-        break;
-      }
-      case 'description': {
-        setFocusFlag({ ...focusFlag, description: true });
-        break;
-      }
-      case 'category': {
-        setFocusFlag({ ...focusFlag, category: true });
-        break;
-      }
-      default: {
-        setFocusFlag({ ...focusFlag, category: true });
-        break;
-      }
-    }
+    // switch (e.target.id) {
+    //   case 'title':
+    //     setFocused({
+    //       ...focused,
+    //       title: true,
+    //     });
+    //     break;
+    //   case 'description': {
+    //     setFocused({
+    //       ...focused,
+    //       description: true,
+    //     });
+    //     break;
+    //   }
+    //   case 'category': {
+    //     setFocused({
+    //       ...focused,
+    //       category: true,
+    //     });
+    //     break;
+    //   }
+    //   default: {
+    //     setFocused({
+    //       ...focused,
+    //       content: true,
+    //     });
+    //     break;
+    //   }
+    // }
   };
 
+  useEffect(() => {
+    console.log(postFormData);
+  }, [postFormData]);
+
   const formUpdateHandler = (e) => {
+    console.log('fire');
     if (e.type === 'click') {
       setPostFormData({
         ...postFormData,
@@ -59,6 +74,7 @@ const usePostForm = () => {
     } else {
       switch (e.target.id) {
         case 'title': {
+          console.log('change title');
           setPostFormData({
             ...postFormData,
             Title: e.target.value,
@@ -96,22 +112,22 @@ const usePostForm = () => {
         console.log('in edit');
         if (postFormData.Title.trim().length === 0) {
           console.log('title error');
-          setErrorFlag({ ...errorFlag, title: true });
+          setError({ ...error, title: true });
           break;
         }
         if (postFormData.Category === 0) {
           console.log('cate error');
-          setErrorFlag({ ...errorFlag, category: true });
+          setError({ ...error, category: true });
           break;
         }
         if (postFormData.CoverImg.length === 0) {
           console.log('img error');
-          setErrorFlag({ ...errorFlag, image: true });
+          setError({ ...error, image: true });
           break;
         }
         if (postFormData.Description.trim().length === 0) {
           console.log('desc error');
-          setErrorFlag({ ...errorFlag, description: true });
+          setError({ ...error, description: true });
           break;
         }
         console.log('set true');
@@ -127,15 +143,12 @@ const usePostForm = () => {
   return [
     postFormData,
     markdownData,
-    errorFlag,
-    focusFlag,
+    error,
     setPostFormData,
     setMarkdownData,
     formUpdateHandler,
     focusHandler,
     formValidator,
-    submittable,
   ] as const;
 };
-
 export default usePostForm;

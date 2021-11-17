@@ -19,6 +19,7 @@ import {
   TextFieldProps,
   Stack,
 } from '@mui/material';
+import uuid from 'react-uuid';
 import ImagePreview from '../../images/ImagePreview';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import { CategoryModel } from '../../../models/CategoryModel';
@@ -51,12 +52,16 @@ const PostForm: FC<PostFormProps> = ({ post }) => {
   const [
     postFormData,
     markdownData,
-    postValidator,
+    errorFlag,
+    focusFlag,
     setPostFormData,
     setMarkdownData,
     formUpdateHandler,
     focusHandler,
+    formValidator,
+    submittable,
   ] = usePostForm();
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -104,53 +109,78 @@ const PostForm: FC<PostFormProps> = ({ post }) => {
         Contents: markdownData,
       },
     };
+    const updatePost = async () => {
+      if (await submittable) {
+        try {
+          const updated: any = await useHttp(
+            'patch',
+            `${BACKEND}/Post/updatePost`,
+            {
+              ...data,
+              body: {
+                ...data.body,
+                Id: post.Id,
+              },
+            }
+          );
+          if (updated) {
+            await dispatch(messageActions.setSuccess(updated.data.msg));
+            dispatch(postActions.setEdit());
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    };
 
-    if (postValidator.submittable) {
-      console.log('submittable');
-      // switch (edit) {
-      //   case true:
-      //     try {
-      //       const updated: any = await useHttp(
-      //         'patch',
-      //         `${BACKEND}/Post/updatePost`,
-      //         {
-      //           ...data,
-      //           body: {
-      //             ...data.body,
-      //             Id: post.Id,
-      //           },
-      //         }
-      //       );
-      //       if (updated) {
-      //         await dispatch(messageActions.setSuccess(updated.data.msg));
-      //         dispatch(postActions.setEdit());
-      //       }
-      //     } catch (error) {
-      //       console.log(error);
-      //     }
-      //     break;
-      //   case false: {
-      //     try {
-      //       const created: any = await useHttp(
-      //         'put',
-      //         `${BACKEND}/Post/create`,
-      //         data
-      //       );
-      //       if (created) {
-      //         await dispatch(messageActions.setSuccess(created.data.msg));
-      //         setTimeout(() => {
-      //           router.push(`/Post/${created.data.insertId}`);
-      //         }, 500);
-      //       }
-      //     } catch (error) {
-      //       console.log(error);
-      //     }
-      //     break;
-      //   }
-      // }
+    const addNewPost = async () => {
+      try {
+        const created: any = await useHttp(
+          'put',
+          `${BACKEND}/Post/create`,
+          data
+        );
+        if (created) {
+          await dispatch(messageActions.setSuccess(created.data.msg));
+          await dispatch(
+            postActions.addPost({
+              ...postFormData,
+              Id: uuid(),
+              Contents: markdownData,
+            })
+          );
+          setTimeout(() => {
+            router.push(`/Post/${created.data.insertId}`);
+          }, 500);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    if (edit) {
+      await formValidator('edit');
+
+      await updatePost();
     } else {
-      console.log('unsubmittable');
+      await formValidator('new');
+      await addNewPost();
     }
+
+    // if (postValidator.submittable) {
+    //   console.log('submittable');
+    // switch (edit) {
+    //   case true:
+
+    //     break;
+    //   case false: {
+
+    //     break;
+    //   }
+    // }
+    // } else {
+    //   console.log('unsubmittable');
+    // }
   };
 
   const textFieldProps: TextFieldProps = {
@@ -176,9 +206,9 @@ const PostForm: FC<PostFormProps> = ({ post }) => {
           }
         />
       ) : (
-        <label htmlFor='contained-button-file'>
+        <label htmlFor='post-image'>
           <Input
-            id='image'
+            id='post-image'
             type='file'
             sx={{ display: 'none' }}
             onChange={imageUploadHandler}
@@ -199,7 +229,7 @@ const PostForm: FC<PostFormProps> = ({ post }) => {
         label='Title *'
         value={postFormData.Title}
         onChange={formUpdateHandler}
-        error={postValidator.error.title}
+        error={errorFlag.title}
         onFocus={focusHandler}
         fullWidth
       />
@@ -208,7 +238,7 @@ const PostForm: FC<PostFormProps> = ({ post }) => {
         id='description'
         label='Description *'
         value={postFormData.Description}
-        error={postValidator.error.description}
+        error={errorFlag.description}
         onChange={formUpdateHandler}
         onFocus={focusHandler}
         fullWidth
@@ -232,7 +262,7 @@ const PostForm: FC<PostFormProps> = ({ post }) => {
           labelId='demo-simple-select-label'
           id='category'
           value={postFormData.Category}
-          error={postValidator.error.category}
+          error={errorFlag.category}
           label='Category *'
           onChange={formUpdateHandler}
           onFocus={focusHandler}

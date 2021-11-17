@@ -29,14 +29,21 @@ const HeaderBar: FC = () => {
   };
   return (
     <>
-      <AppBar position='fixed' color='secondary' style={{ boxShadow: 'none' }}>
-        <Toolbar>
+      <AppBar
+        position='fixed'
+        color='secondary'
+        style={{ boxShadow: 'none', marginBottom: '1rem', minHeight: '64px' }}
+      >
+        <Toolbar
+          disableGutters
+          sx={{ paddingLeft: '1rem', justifyContent: 'space-between' }}
+        >
           {isLiggedIn && (
             <Button
               variant='contained'
               size='small'
               sx={{
-                marginRight: 2,
+                marginRight: 1,
               }}
               onClick={newPostHandler}
             >
@@ -52,7 +59,7 @@ const HeaderBar: FC = () => {
               display: { xs: 'none', sm: 'block' },
             }}
           >
-            <Link href='/'>Kenny Blog</Link>
+            <Link href='/'>Kenny Leung Blog</Link>
           </Typography>
 
           {/* search field */}
