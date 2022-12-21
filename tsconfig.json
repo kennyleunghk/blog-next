@@ -20,7 +20,8 @@
     "**/*.tsx",
     "pages/Post/[postId].jsx",
     "hooks/usePosts.tss",
-    "hooks/usePosts.jsx"
+    "hooks/usePosts.jsx",
+    "components/post/postForm/index.ksx"
   ],
   "exclude": ["node_modules"]
 }

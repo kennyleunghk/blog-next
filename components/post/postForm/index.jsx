@@ -30,37 +30,142 @@ import { useHttp, useImageUpload } from '../../../hooks/useHttp';
 import { messageActions } from '../../../store/slices/message-slice';
 import { BACKEND } from '../../../config';
 import { rootState } from '../../../store';
-import usePostForm from '../../../hooks/usePostForm';
 
 import '@uiw/react-md-editor/markdown-editor.css';
 import '@uiw/react-markdown-preview/markdown.css';
 import { PostModel } from '../../../models/PostModel';
 import { postActions } from '../../../store/slices/post-slice';
+import axios from 'axios';
 
-const MDEditor: any = dynamic(
+const MDEditor = dynamic(
   () => import('@uiw/react-md-editor').then((mod) => mod.default),
   { ssr: false }
 );
 
-interface PostFormProps {
-  post: PostModel;
-}
-
-const PostForm: FC<PostFormProps> = ({ post }) => {
+const PostForm = ({ post }) => {
   const router = useRouter();
-  const edit = useSelector((state: rootState) => state.post.edit);
-  const [
-    postFormData,
-    markdownData,
-    errorFlag,
-    focusFlag,
-    setPostFormData,
-    setMarkdownData,
-    formUpdateHandler,
-    focusHandler,
-    formValidator,
-    submittable,
-  ] = usePostForm();
+  const edit = useSelector((state) => state.post.edit);
+  const [postFormData, setPostFormData] = useState({
+    Title: '',
+    CoverImg: '',
+    Description: '',
+    Tags: '',
+    Category: 0,
+  });
+
+  const [markdownData, setMarkdownData] = useState('');
+
+  const [errorFlag, setErrorFlag] = useState({
+    title: false,
+    image: false,
+    description: false,
+    category: false,
+    content: false,
+  });
+
+  const [focusFlag, setFocusFlag] = useState({
+    title: false,
+    image: false,
+    description: false,
+    category: false,
+    content: false,
+  });
+
+  const [submittable, setSubmittable] = useState(false);
+
+  const focusHandler = (e) => {
+    switch (e.target.id) {
+      case 'title': {
+        setFocusFlag({ ...focusFlag, title: true });
+        break;
+      }
+      case 'description': {
+        setFocusFlag({ ...focusFlag, description: true });
+        break;
+      }
+      case 'category': {
+        setFocusFlag({ ...focusFlag, category: true });
+        break;
+      }
+      default: {
+        setFocusFlag({ ...focusFlag, category: true });
+        break;
+      }
+    }
+  };
+
+  const formUpdateHandler = (e) => {
+    if (e.type === 'click') {
+      setPostFormData({
+        ...postFormData,
+        Category: e.target.value,
+      });
+    } else {
+      switch (e.target.id) {
+        case 'title': {
+          setPostFormData({
+            ...postFormData,
+            Title: e.target.value,
+          });
+          break;
+        }
+        case 'description': {
+          setPostFormData({
+            ...postFormData,
+            Description: e.target.value,
+          });
+          break;
+        }
+        case 'tags': {
+          setPostFormData({
+            ...postFormData,
+            Tags: e.target.value,
+          });
+          break;
+        }
+        default:
+          setPostFormData({
+            ...postFormData,
+          });
+      }
+    }
+  };
+  const formValidator = async (formType) => {
+    switch (formType) {
+      case 'new': {
+        break;
+      }
+      case 'edit': {
+        console.log('in edit');
+        if (postFormData.Title.trim().length === 0) {
+          console.log('title error');
+          await setErrorFlag({ ...errorFlag, title: true });
+          break;
+        }
+        if (postFormData.Category === 0) {
+          console.log('cate error');
+          await setErrorFlag({ ...errorFlag, category: true });
+          break;
+        }
+        if (postFormData.CoverImg.length === 0) {
+          console.log('img error');
+          await setErrorFlag({ ...errorFlag, image: true });
+          break;
+        }
+        if (postFormData.Description.trim().length === 0) {
+          console.log('desc error');
+          await setErrorFlag({ ...errorFlag, description: true });
+          break;
+        }
+        console.log('set true');
+        await setSubmittable(true);
+        return await { submittable: true };
+      }
+      default:
+        console.log('Form Type error');
+        break;
+    }
+  };
 
   const dispatch = useDispatch();
 
@@ -76,11 +181,12 @@ const PostForm: FC<PostFormProps> = ({ post }) => {
       setMarkdownData(post.Contents);
     }
   }, [edit]);
-  useEffect(() => {
-    console.log(postFormData);
-  }, [postFormData]);
 
-  const imageUploadHandler = async (e: ChangeEvent<HTMLInputElement>) => {
+  useEffect(() => {
+    console.log(submittable);
+  }, [submittable]);
+
+  const imageUploadHandler = async (e) => {
     const result = await useImageUpload(e.target.files[0]);
     if (result.success) {
       await dispatch(messageActions.setSuccess(result.success));
@@ -93,78 +199,65 @@ const PostForm: FC<PostFormProps> = ({ post }) => {
     }
   };
 
-  const categories: Array<CategoryModel> = useSelector(
-    (state: rootState) => state.post.categories
-  );
+  const categories = useSelector((state) => state.post.categories);
 
-  const submitHandler: FormEventHandler = async (e: FormEvent<HTMLElement>) => {
+  const addNewPost = async () => {
+    try {
+      const created = await useHttp('put', `${BACKEND}/Post/create`, data);
+      if (created) {
+        await dispatch(messageActions.setSuccess(created.data.msg));
+        await dispatch(
+          postActions.addPost({
+            ...postFormData,
+            Id: uuid(),
+            Contents: markdownData,
+          })
+        );
+        setTimeout(() => {
+          router.push(`/Post/${created.data.insertId}`);
+        }, 500);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const submitHandler = async (e) => {
     e.preventDefault();
-    const data = {
+
+    const options = {
       headers: {
-        Authorization: 'Bearer ' + localStorage.getItem('token'),
+        authorization: 'Bearer ' + localStorage.getItem('token'),
         'Content-Type': 'application/json',
       },
-      body: {
-        ...postFormData,
-        Contents: markdownData,
-      },
-    };
-    const updatePost = async () => {
-      if (await submittable) {
-        try {
-          const updated: any = await useHttp(
-            'patch',
-            `${BACKEND}/Post/updatePost`,
-            {
-              ...data,
-              body: {
-                ...data.body,
-                Id: post.Id,
-              },
-            }
-          );
-          if (updated) {
-            await dispatch(messageActions.setSuccess(updated.data.msg));
-            dispatch(postActions.setEdit());
-          }
-        } catch (error) {
-          console.log(error);
-        }
-      }
     };
 
-    const addNewPost = async () => {
+    if (edit) {
       try {
-        const created: any = await useHttp(
-          'put',
-          `${BACKEND}/Post/create`,
-          data
-        );
-        if (created) {
-          await dispatch(messageActions.setSuccess(created.data.msg));
-          await dispatch(
-            postActions.addPost({
+        const validated = await formValidator('edit');
+        if (validated) {
+          console.log(localStorage.getItem('token'));
+          const result = await axios.patch(
+            `${BACKEND}/Post/updatePost`,
+            {
               ...postFormData,
-              Id: uuid(),
+              Id: post.Id,
               Contents: markdownData,
-            })
+            },
+            options
           );
-          setTimeout(() => {
-            router.push(`/Post/${created.data.insertId}`);
-          }, 500);
+          if (result) {
+            console.log(result);
+            await dispatch(messageActions.setSuccess('success'));
+            await router.push('/');
+          }
         }
       } catch (error) {
         console.log(error);
       }
-    };
-
-    if (edit) {
-      await formValidator('edit');
-
-      await updatePost();
     } else {
       await formValidator('new');
-      await addNewPost();
+      // await addNewPost();
     }
 
     // if (postValidator.submittable) {
@@ -183,7 +276,7 @@ const PostForm: FC<PostFormProps> = ({ post }) => {
     // }
   };
 
-  const textFieldProps: TextFieldProps = {
+  const textFieldProps = {
     size: 'small',
     color: 'secondary',
     sx: { margin: '0.8rem 0' },
@@ -268,7 +361,7 @@ const PostForm: FC<PostFormProps> = ({ post }) => {
           onFocus={focusHandler}
           required
         >
-          {categories.map((cate: CategoryModel) => (
+          {categories.map((cate) => (
             <MenuItem key={cate.id} value={cate.id}>
               {cate.name}
             </MenuItem>

@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react';
 
 import useAuth from '../../hooks/useAuth';
 
-import PostForm from './postForm';
+import PostForm from './postForm/index.jsx';
 
 const NewPost: FC = () => {
   return <PostForm />;

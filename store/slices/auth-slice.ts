@@ -1,3 +1,4 @@
+import { RssFeed } from '@mui/icons-material';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface InitialState {
@@ -6,6 +7,11 @@ interface InitialState {
 
 const initialState = {
   isLoggedIn: false,
+  user: {
+    usename: '',
+    password: '',
+    userId: '',
+  },
 };
 
 const authSlice = createSlice({
